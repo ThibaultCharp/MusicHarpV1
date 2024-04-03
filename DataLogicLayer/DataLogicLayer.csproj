@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLogicLayer\DataLogicLayer.csproj" />
+    <Folder Include="Entitys\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.3.0" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicHarpV1.Models;
 using System.Diagnostics;
+using BusinessLogicLayer.Classes;
 
 namespace MusicHarpV1.Controllers
 {
@@ -15,11 +16,13 @@ namespace MusicHarpV1.Controllers
 
         public IActionResult Index()
         {
-            HomeViewModel model = new HomeViewModel();
-			List<string> woordenlijst = new List<string>();
-			//woordenlijst = model.setWordsList();
+            SongBusinessLogic songBusinessLogic = new SongBusinessLogic();
+			List<string> items = songBusinessLogic.setWordsList();
 
-            return View(model);
+            HomeViewModel homeViewModel = new HomeViewModel();
+			homeViewModel.songs = items;
+
+            return View(homeViewModel);
         }
 
         public IActionResult Privacy()

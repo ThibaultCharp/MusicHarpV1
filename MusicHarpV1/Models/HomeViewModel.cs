@@ -2,6 +2,8 @@
 {
     public class HomeViewModel
     {
-            
+        public List<string> songs { get; set;}
+
+        
     }
 }

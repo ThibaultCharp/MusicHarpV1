@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Classes
 {
-	internal class SongBusinessLogic
+	public class SongBusinessLogic
 	{
+		List<string> songs = new List<string>();
 
+		public List<string> setWordsList()
+		{
+			songs.Add("joo");
+			songs.Add("popp");
 
+			return songs;
+		}
 	}
 }
+
