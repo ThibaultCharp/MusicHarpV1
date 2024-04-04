@@ -1,20 +1,24 @@
-﻿using System;
+﻿using DataLogicLayer.Entitys;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using DataLogicLayer.DAL;
 
 namespace BusinessLogicLayer.Classes
 {
 	public class SongBusinessLogic
 	{
-		List<string> songs = new List<string>();
+		List<Song> songs = new List<Song>();
 
-		public List<string> setWordsList()
+        private SongRepository repository = new SongRepository();
+
+
+		public List<Song> GetAllSongs()
 		{
-			songs.Add("joo");
-			songs.Add("popp");
-
+			songs = repository.GetAllSongs();
 			return songs;
 		}
 	}

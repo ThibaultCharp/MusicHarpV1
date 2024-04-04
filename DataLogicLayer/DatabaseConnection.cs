@@ -34,6 +34,7 @@ namespace DataLogicLayer
 			connection = new MySqlConnection(connectionString);
 		}
 
+
 		// Open connection to database
 		public bool OpenConnection()
 		{
@@ -48,6 +49,7 @@ namespace DataLogicLayer
 				return false;
 			}
 		}
+
 
 		// Close connection to database
 		public bool CloseConnection()

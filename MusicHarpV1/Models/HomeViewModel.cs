@@ -1,8 +1,10 @@
-﻿namespace MusicHarpV1.Models
+﻿using DataLogicLayer.Entitys;
+
+namespace MusicHarpV1.Models
 {
     public class HomeViewModel
     {
-        public List<string> songs { get; set;}
+        public List<Song> songList { get; set;}
 
         
     }

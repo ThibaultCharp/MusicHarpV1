@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MusicHarpV1.Models;
 using System.Diagnostics;
 using BusinessLogicLayer.Classes;
+using DataLogicLayer.Entitys;
 
 namespace MusicHarpV1.Controllers
 {
@@ -17,12 +18,12 @@ namespace MusicHarpV1.Controllers
         public IActionResult Index()
         {
             SongBusinessLogic songBusinessLogic = new SongBusinessLogic();
-			List<string> items = songBusinessLogic.setWordsList();
+            List<Song> songs = songBusinessLogic.GetAllSongs();
 
-            HomeViewModel homeViewModel = new HomeViewModel();
-			homeViewModel.songs = items;
+            HomeViewModel songViewModel = new HomeViewModel();
+            songViewModel.songList = songs;
 
-            return View(homeViewModel);
+            return View(songViewModel);
         }
 
         public IActionResult Privacy()

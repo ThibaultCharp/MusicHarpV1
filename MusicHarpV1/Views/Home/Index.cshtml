@@ -1,6 +1,30 @@
 ﻿@model HomeViewModel
 
-@foreach (var item in Model.songs)
-{
-	<p>@item</p>
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Songs List</title>
+</head>
+<body>
+    <h1>Songs List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Title</th>
+                <th>Song_url</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var song in Model.songList)
+            {
+                <tr>
+                    <td>@song.Id</td>
+                    <td>@song.Name</td>
+                    <td>@song.SongUrl</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
