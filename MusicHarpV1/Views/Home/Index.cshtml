@@ -1,6 +1,4 @@
-﻿@model HomeViewModel
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Songs List</title>
@@ -10,7 +8,7 @@
     <table>
         <thead>
             <tr>
-                <th>Number</th>
+                <th>Artist</th>
                 <th>Title</th>
                 <th>Song_url</th>
             </tr>
@@ -19,8 +17,8 @@
             @foreach (var song in Model.songList)
             {
                 <tr>
-                    <td>@song.Id</td>
-                    <td>@song.Name</td>
+                    <td>@song.ArtistName</td>
+                    <td>@song.SongName</td>
                     <td>@song.SongUrl</td>
                 </tr>
             }

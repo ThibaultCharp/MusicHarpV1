@@ -1,0 +1,7 @@
+﻿@model PresentationLayer.Models.EditPlaylistViewModel
+
+<form asp-action="SaveEditedPlaylist" method="post">
+    <input type="hidden" name="id" value="@Model.playlist.Id">
+    <input type="text" name="name" placeholder="@Model.playlist.Name">
+    <input type="submit" class="btn btn-outline-dark" value="Save">
+</form>

@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataLogicLayer.Entitys
 {
-	public class Song
-	{
-		public string ArtistName { get; set; }
-		public string SongName { get; set; }
-		public string SongUrl { get; set; }
-
-	}
+    public class Playlist
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }

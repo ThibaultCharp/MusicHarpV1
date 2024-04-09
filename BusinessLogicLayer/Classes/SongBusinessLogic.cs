@@ -18,9 +18,9 @@ namespace BusinessLogicLayer.Classes
 
 		public List<Song> GetAllSongs()
 		{
-			songs = repository.GetAllSongs();
-			return songs;
+            songs = repository.GetAllSongs();
+            return songs;
 		}
+
 	}
 }
-
