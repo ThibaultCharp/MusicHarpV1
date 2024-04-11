@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using System.Media;
 
 namespace DataLogicLayer.DAL
 {
@@ -55,7 +56,7 @@ namespace DataLogicLayer.DAL
 
             if (_dbConnection.OpenConnection())
             {
-                string query = "SELECT songs.name AS song_name, artists.name AS artist_name " +
+                string query = "SELECT songs.name AS song_name, artists.name AS artist_name, songs.song_url " +
                                "FROM songs, artists, artist_songs " +
                                "WHERE songs.id = artist_songs.song_id " +
                                "AND artists.id = artist_songs.artist_id " +
@@ -78,6 +79,7 @@ namespace DataLogicLayer.DAL
                             {
                                 SongName = reader["song_name"].ToString(),
                                 ArtistName = reader["artist_name"].ToString(),
+                                SongUrl = reader["song_url"].ToString()
                             };
                             songs.Add(song);
                         }
@@ -105,6 +107,5 @@ namespace DataLogicLayer.DAL
                 }
             }
         }
-
     }
 }

@@ -71,7 +71,14 @@
             @foreach (var song in Model.songs)
             {
                 <article>
-                    <p>@song.SongName @song.ArtistName</p>
+                    <p>@song.SongName, @song.ArtistName</p>
+
+                    <form action="SelectPlayListToAddSong" method="post">
+                        <input type="hidden" name="sId" value="@song.Id">
+                        <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="btn btn-primary">Add to a playlist</a>
+                        <iframe width="500" height="75"
+                                src="@song.SongUrl"></iframe>
+                    </form>
                 </article>
             }
 

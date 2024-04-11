@@ -126,7 +126,7 @@ namespace MusicHarpV1.Controllers
         public IActionResult AddSongToPlaylist(int pId, int sId)
         {
             songBusinessLogic.InsertSongInPlaylist(pId, sId);
-            return RedirectToAction("Playlist");
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

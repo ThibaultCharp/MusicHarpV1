@@ -73,7 +73,7 @@
             {
                 <article>
                     <p>@playlist.Name</p>
-                    <form asp-action="AddToPlaylist" method="post">
+                    <form asp-action="AddSongToPlaylist" method="post">
                         <input type="hidden" name="pId" value="@playlist.Id">
                         <a href="@Url.Action("AddSongToPlaylist", new { pId = playlist.Id, sId = Model.sId})" class="btn btn-primary">Add</a>
                     </form>
