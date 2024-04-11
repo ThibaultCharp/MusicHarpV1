@@ -13,6 +13,8 @@ namespace BusinessLogicLayer.Classes
 	{
 		List<Song> songs = new List<Song>();
 
+		List<Song> searchedSongs = new List<Song>();
+
         private SongRepository repository = new SongRepository();
 
 
@@ -22,5 +24,16 @@ namespace BusinessLogicLayer.Classes
             return songs;
 		}
 
-	}
+		public List<Song> GetSearchedSongs(string input) 
+		{
+			searchedSongs = repository.GetSearchedSongs(input);
+			return searchedSongs;
+		}
+
+		public void InsertSongInPlaylist(int pId, int sId)
+		{
+			repository.InsertSongInPlaylist(pId, sId);
+		}
+
+    }
 }

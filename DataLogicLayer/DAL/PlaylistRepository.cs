@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -123,8 +124,44 @@ namespace DataLogicLayer.DAL
 					cmd.Parameters.AddWithValue("@name", playlist.Name);
 					cmd.Parameters.AddWithValue("@id", playlist.Id);
 					cmd.ExecuteNonQuery();
+
 				}
 			}
 		}
-	}
+
+
+        public List<Song> GetSongsInPlaylist(int id)
+        {
+            List<Song> songs = new List<Song>();
+
+            string query = "SELECT name, song_url " +
+                            "FROM songs " +
+                            "JOIN playlist_songs ON songs.id = playlist_songs.song_id " +
+                            "WHERE playlist_songs.playlist_id = @id";
+			if (_dbConnection.OpenConnection())
+            {
+
+                MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Song song = new Song ();
+                    song.SongName = dataReader["name"].ToString();
+                    song.SongUrl = dataReader["song_url"].ToString();
+					
+                    //song.ArtistName = dataReader["categorie_title"].ToString();
+
+                    songs.Add (song);
+                }
+
+                dataReader.Close();
+                _dbConnection.CloseConnection();
+            }
+
+            return songs;
+        }
+
+    }
 }

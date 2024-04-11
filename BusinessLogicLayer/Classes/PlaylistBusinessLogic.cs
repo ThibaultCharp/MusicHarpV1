@@ -34,14 +34,18 @@ namespace BusinessLogicLayer.Classes
         }
 
         public Playlist EditPlaylist(int id)
-        {
-            
+        {    
             return repository.GetWantedPlaylist(id); 
         }
 
         public void SaveEditedPlaylist(Playlist playlist)
         {
             repository.SaveEditedPlaylist(playlist);
+        }
+
+        public List<Song> GetSongsFromPlaylist(int id)
+        {
+            return repository.GetSongsInPlaylist(id);
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿@model PresentationLayer.Models.PlaylistViewModel
+﻿@model PresentationLayer.Models.PlaylistSongsViewModel
+
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Playlist List</title>
+    <title>Playlist songs</title>
 
     <style>
         body {
@@ -62,30 +63,16 @@
     </style>
 </head>
 <body>
-    <a href="@Url.Action("Index")" class="btn btn-primary">Back</a>
-    <hr>
     <h1>Playlist List</h1>
-
-    <form asp-action="CreatePlaylist" method="post">
-        <input type="text" name="Name" placeholder="Playlist name">
-        <input type="submit" class ="btn btn-outline-dark" value="Create">
-    </form>
 
 
     <table>
         <tbody>
-            @foreach (var playlist in Model.PlaylistList)
+            @foreach (var song in Model.songs)
             {
-                <article>
-                    <p>@playlist.Name</p>
-                    <form action="DeletePlaylist" method="post">
-                        <input type="hidden" name="id" value="@playlist.Id">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        <a href="@Url.Action("EditPlaylist", new { id = playlist.Id })" class="btn btn-primary">Edit</a>
-                        <a href="@Url.Action("PlaylistSongs", new { id = playlist.Id })" class="btn btn-primary">Songs</a>
-                    </form>
-                </article>
+                <p>@song.SongName</p>
             }
+
         </tbody>
     </table>
 
