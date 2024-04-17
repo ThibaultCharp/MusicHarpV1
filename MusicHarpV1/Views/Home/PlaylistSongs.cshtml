@@ -63,19 +63,20 @@
     </style>
 </head>
 <body>
-    <h1>Songs List</h1>
+    <a href="@Url.Action("Playlist")" class="btn btn-primary">Back</a>
+    <hr>
+    <h1>Song List</h1>
 
 
     <table>
         <tbody>
-            @foreach (var song in Model.songs)
+            @foreach (var song in Model.songList)
             {
                 <article>
                     <p>@song.SongName, @song.ArtistName</p>
 
                     <form action="SelectPlayListToAddSong" method="post">
                         <input type="hidden" name="sId" value="@song.Id">
-                        <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="btn btn-primary">Add to a playlist</a>
                         <iframe width="500" height="75"
                                 src="@song.SongUrl"></iframe>
                     </form>
@@ -84,7 +85,5 @@
 
         </tbody>
     </table>
-
-
 </body>
 </html>

@@ -10,5 +10,7 @@ namespace MusicHarpV1.Models
         public string input { get; set; }
 
         public int songInput { get; set; }
+
+        public int sId { get; set; }
     }
 }

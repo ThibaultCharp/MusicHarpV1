@@ -21,9 +21,9 @@ namespace DataLogicLayer.DAL
             if (_dbConnection.OpenConnection())
             {
                 var query = "SELECT songs.name AS song_name, songs.song_url, artists.name AS artist_name, songs.id " +
-                            "FROM songs " +
-                            "JOIN artist_songs ON songs.id = artist_songs.song_id " +
-                            "JOIN artists ON artist_songs.artist_id = artists.id";
+                    "FROM songs JOIN artist_songs ON songs.id = artist_songs.song_id " +
+                    "JOIN artists ON artist_songs.artist_id = artists.id " +
+                    "ORDER BY songs.id DESC";
 
                 using (var command = new MySqlCommand(query, _dbConnection.connection))
                 {
@@ -56,11 +56,13 @@ namespace DataLogicLayer.DAL
 
             if (_dbConnection.OpenConnection())
             {
-                string query = "SELECT songs.name AS song_name, artists.name AS artist_name, songs.song_url " +
+                string query = "SELECT songs.name AS song_name, artists.name AS artist_name, songs.song_url, songs.id " +
                                "FROM songs, artists, artist_songs " +
                                "WHERE songs.id = artist_songs.song_id " +
                                "AND artists.id = artist_songs.artist_id " +
-                               "AND (songs.name LIKE @Input OR artists.name LIKE @Input)";
+                               "AND (songs.name LIKE @Input OR artists.name LIKE @Input)" +
+                               "ORDER BY songs.id DESC";
+                
                 using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
                 {
                     connection.Open();
@@ -79,7 +81,9 @@ namespace DataLogicLayer.DAL
                             {
                                 SongName = reader["song_name"].ToString(),
                                 ArtistName = reader["artist_name"].ToString(),
-                                SongUrl = reader["song_url"].ToString()
+                                SongUrl = reader["song_url"].ToString(),
+                                Id = Convert.ToInt32(reader["id"])
+
                             };
                             songs.Add(song);
                         }

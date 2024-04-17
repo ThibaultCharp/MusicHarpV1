@@ -13,7 +13,6 @@ namespace DataLogicLayer.DAL
 {
 	public class PlaylistRepository
 	{
-
 		DatabaseConnection _dbConnection = new DatabaseConnection();
 
 		public List<Playlist> GetSelectedPlaylists()
@@ -43,8 +42,6 @@ namespace DataLogicLayer.DAL
 			}
 			return playlists;
 		}
-
-
 
 		public void CreateNewPlaylist(Playlist playlist)
 		{
@@ -82,7 +79,6 @@ namespace DataLogicLayer.DAL
 				}
 				_dbConnection.CloseConnection();
 			}
-
 		}
 
 		public Playlist GetWantedPlaylist(int id)
@@ -107,7 +103,6 @@ namespace DataLogicLayer.DAL
 					reader.Close();
 				}
 			}
-
 			return playlist;
 		}
 
@@ -151,17 +146,12 @@ namespace DataLogicLayer.DAL
                     song.SongName = dataReader["name"].ToString();
                     song.SongUrl = dataReader["song_url"].ToString();
 					
-                    //song.ArtistName = dataReader["categorie_title"].ToString();
-
                     songs.Add (song);
                 }
-
                 dataReader.Close();
                 _dbConnection.CloseConnection();
             }
-
             return songs;
         }
-
     }
 }

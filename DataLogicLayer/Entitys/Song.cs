@@ -12,6 +12,5 @@ namespace DataLogicLayer.Entitys
 		public string ArtistName { get; set; }
 		public string SongName { get; set; }
 		public string SongUrl { get; set; }
-
 	}
 }

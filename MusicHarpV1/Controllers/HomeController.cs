@@ -22,16 +22,6 @@ namespace MusicHarpV1.Controllers
         SongBusinessLogic songBusinessLogic = new SongBusinessLogic();
         PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic();
 
-        //public IActionResult Index()
-        //{
-        //    List<Song> songs = songBusinessLogic.GetAllSongs();
-
-        //    SongViewModel songViewModel = new SongViewModel();
-        //    songViewModel.songList = songs;
-
-        //    return View(songViewModel);
-        //}
-
         public IActionResult Index(string input)
         {
             SongViewModel songViewModel = new SongViewModel();
@@ -50,9 +40,7 @@ namespace MusicHarpV1.Controllers
             return View(songViewModel);
         }
 
-
-
-        public IActionResult Playlist(Playlist playlistName)
+        public IActionResult Playlist()
         {
             List<Playlist> playlists = playlistBusinessLogic.GetSelectedPlaylists();
 
@@ -60,9 +48,7 @@ namespace MusicHarpV1.Controllers
             playlistViewModel.PlaylistList = playlists;
             return View(playlistViewModel);
         }
-
-
-        
+   
         public IActionResult CreatePlaylist(Playlist playlist)
         {
             playlistBusinessLogic.CreateNewPlaylist(playlist);
@@ -77,25 +63,13 @@ namespace MusicHarpV1.Controllers
 
             return RedirectToAction("Playlist");
         }
+
         public IActionResult PlaylistSongs(int id)
         {
             PlaylistSongsViewModel playlistSongsViewModel = new PlaylistSongsViewModel();
-            playlistSongsViewModel.songs = playlistBusinessLogic.GetSongsFromPlaylist(id);
+            playlistSongsViewModel.songList = playlistBusinessLogic.GetSongsFromPlaylist(id);
             return View(playlistSongsViewModel);
         }
-
-
-        public ActionResult SearchedSongs(string input) 
-        {
-            
-            SongViewModel songViewModel = new SongViewModel();
-            List<Song> songs = songBusinessLogic.GetSearchedSongs(input);
-
-            songViewModel.songList = songs;
-
-            return View(songViewModel);
-        }
-
 
         public IActionResult EditPlaylist(int id) 
         {
@@ -134,7 +108,5 @@ namespace MusicHarpV1.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
     }
 }

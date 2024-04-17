@@ -27,7 +27,7 @@ namespace PresentationLayer.Controllers
         public IActionResult ViewSongsInPlaylist(int id)
 		{
 			PlaylistSongsViewModel playlistSongsViewModel = new PlaylistSongsViewModel();
-			playlistSongsViewModel.songs = playlistBusinessLogic.GetSongsFromPlaylist(id);
+			playlistSongsViewModel.songList = playlistBusinessLogic.GetSongsFromPlaylist(id);
 			return View(playlistSongsViewModel);
 		}
 

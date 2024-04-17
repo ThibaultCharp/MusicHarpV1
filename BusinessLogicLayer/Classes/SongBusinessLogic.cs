@@ -34,6 +34,5 @@ namespace BusinessLogicLayer.Classes
 		{
 			repository.InsertSongInPlaylist(pId, sId);
 		}
-
     }
 }

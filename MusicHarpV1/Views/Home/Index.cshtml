@@ -1,90 +1,185 @@
 ﻿@model SongViewModel
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    p {
-        font-size: 16px;
-    }
-
-    form {
-        margin-bottom: 20px;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
-
-    input[type="submit"] {
-        background-color: #007bff;
-        color: #ffffff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    article {
-        border: 1px solid #ddd;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-</style>
-
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 <html>
 <head>
-    <a href="@Url.Action("Playlist")" class="btn btn-primary">playlists</a>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
 
-    <title>Songs List</title>
+
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-container{
+            width: 20%; /* Adjust as needed */
+            float: left;
+            margin-right: 5px; /* Add spacing between containers */
+            background-color: #121212;
+            height: 100%;
+            position: fixed;
+            border-radius: 10px;
+        }
+        
+
+        .main-container {
+            width: 78%; /* Adjust as needed */
+            float: right;
+            margin right: 10%;
+            background-color: #121212;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        p {
+            font-size: 16px;
+            color: grey;
+        }
+
+        form {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 2%;
+        }
+
+        article {
+            border: 1px solid black;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background-color: #232323;
+            width: 80%;
+        }
+
+        .article_container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+        }
+
+        .Add_to_playlist_btn{
+            background-color: #232323;
+        }
+
+        .Add_to_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
+
+        .create_new_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
+
+
+    </style>
 </head>
 <body>
-    <h1>Songs List</h1>
-    <form asp-action="Index" method="post">
-        <input type="text" name="Input" placeholder="Search song or artist">
-        <input type="submit" class="btn btn-outline-dark" value="Search">
-    </form>
-    <table>
+    <div class="left-container">
+        <a href="@Url.Action("Playlist")" class="createNewPlaylist" class="create_new_playlist_btn">Create new playlist</a>
+    </div>
+    <div class="main-container">
+        <head>
+            <title>Songs List</title>
+        </head>
         <body>
-            @foreach (var song in Model.songList)
-            {
-                <article>
-                    <p>@song.SongName, @song.ArtistName</p>
 
-                    <form action="SelectPlayListToAddSong" method="post">
-                        <input type="hidden" name="sId" value="@song.Id">
-                        <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="btn btn-primary">Add to a playlist</a>
-                        <iframe width="500" height="75"
-                                src="@song.SongUrl"></iframe>
-                    </form>
-                </article>
-            }
+            <table>
+                <body>
+                    <div class="article_container">
+                        <h1>Song List</h1>
+                        <form asp-action="Index" method="post">
+                            <input type="text" name="Input" placeholder="Search song or artist">
+                            <input type="submit" class="btn btn-outline-dark" value="Search">
+                        </form>
+                        @foreach (var song in Model.songList)
+                        {
+                            <article>
+                                <p>@song.SongName, @song.ArtistName</p>
+                                <form action="SelectPlayListToAddSong" method="post">
+                                    <input type="hidden" name="sId" value="@song.Id">
+                                    <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="Add_to_playlist_btn">Add to a playlist</a>
+                                    <iframe width="90%" height="70"
+                                            src="@song.SongUrl"></iframe>
+                                </form>
+                            </article>
+                        }
+                    </div>
+                </body>
+            </table>
         </body>
-    </table>
-    <hr>
+    </div>
 </body>
 </html>
