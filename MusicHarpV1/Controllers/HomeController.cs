@@ -21,6 +21,7 @@ namespace MusicHarpV1.Controllers
 
         SongBusinessLogic songBusinessLogic = new SongBusinessLogic();
         PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic();
+        ArtistBusinessLogic artistBusinessLogic = new ArtistBusinessLogic();
 
         public IActionResult Index(string input)
         {
@@ -48,7 +49,24 @@ namespace MusicHarpV1.Controllers
             playlistViewModel.PlaylistList = playlists;
             return View(playlistViewModel);
         }
-   
+
+        public IActionResult Artist() 
+        {
+            List<Artist> artists = artistBusinessLogic.GetAllArtists();
+            ArtistViewModel artistViewModel = new ArtistViewModel();
+            artistViewModel.artists = artists;
+            return View(artistViewModel);
+        }
+        public IActionResult SongsWithoutArtist()
+        {
+            List<Song> songs = songBusinessLogic.GetSongsWithoutArtist();
+
+            SongsWithoutArtistViewModel songsWithoutArtistViewModel = new SongsWithoutArtistViewModel();
+            songsWithoutArtistViewModel.songsWithoutArtist = songs;
+            return View(songsWithoutArtistViewModel);
+        }
+
+
         public IActionResult CreatePlaylist(Playlist playlist)
         {
             playlistBusinessLogic.CreateNewPlaylist(playlist);
@@ -56,7 +74,18 @@ namespace MusicHarpV1.Controllers
             return RedirectToAction("Playlist");
         }
 
-        
+        public IActionResult CreateSong(Song song)
+        {
+            songBusinessLogic.CreateNewSong(song);
+            return RedirectToAction("SongsWithoutArtist");
+        }
+
+        public ActionResult CreateArtist(Artist artist)
+        {
+            artistBusinessLogic.CreateNewArtist(artist);
+            return RedirectToAction("Artist");
+        }
+
         public IActionResult DeletePlaylist(int id)
         {
             playlistBusinessLogic.DeletePlaylist(id);
@@ -67,7 +96,7 @@ namespace MusicHarpV1.Controllers
         public IActionResult PlaylistSongs(int id)
         {
             PlaylistSongsViewModel playlistSongsViewModel = new PlaylistSongsViewModel();
-            playlistSongsViewModel.songList = playlistBusinessLogic.GetSongsFromPlaylist(id);
+            playlistSongsViewModel.songs = playlistBusinessLogic.GetSongsFromPlaylist(id);
             return View(playlistSongsViewModel);
         }
 
@@ -95,6 +124,26 @@ namespace MusicHarpV1.Controllers
             playlistViewModel.PlaylistList = playlists;
             addSongToPlaylistViewModel.playlistViewModel = playlistViewModel;   
             return View(addSongToPlaylistViewModel);
+        }
+
+
+
+        public IActionResult SelectArtistToLinkSong(int SongId)
+        {
+            LinkSongToArtistViewModel linkSongToArtistViewModel = new LinkSongToArtistViewModel();
+            linkSongToArtistViewModel.SongId = SongId;
+            List<Artist> artists = artistBusinessLogic.GetAllArtists();
+
+            ArtistViewModel artistViewModel = new ArtistViewModel();
+            artistViewModel.artists = artists;
+            linkSongToArtistViewModel.artistViewModel = artistViewModel;
+            return View(linkSongToArtistViewModel);
+        }
+
+        public IActionResult LinkSongToArtist(int ArtistId, int SongId)
+        {
+            songBusinessLogic.LinkSongToArtist(ArtistId, SongId);
+            return RedirectToAction("Index");
         }
 
         public IActionResult AddSongToPlaylist(int pId, int sId)

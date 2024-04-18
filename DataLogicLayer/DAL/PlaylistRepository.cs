@@ -45,7 +45,7 @@ namespace DataLogicLayer.DAL
 
 		public void CreateNewPlaylist(Playlist playlist)
 		{
-			string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, '5');";
+			string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, '5')";
 			using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
 			{
 				connection.Open();

@@ -24,6 +24,18 @@ namespace BusinessLogicLayer.Classes
             return songs;
 		}
 
+		public Song CreateNewSong(Song song)
+		{
+			repository.CreateNewSong(song);
+			return song;
+		}
+
+		public List<Song> GetSongsWithoutArtist() 
+		{ 
+			songs = repository.GetSongsWithoutArtist();
+			return songs;
+		}
+
 		public List<Song> GetSearchedSongs(string input) 
 		{
 			searchedSongs = repository.GetSearchedSongs(input);
@@ -33,6 +45,11 @@ namespace BusinessLogicLayer.Classes
 		public void InsertSongInPlaylist(int pId, int sId)
 		{
 			repository.InsertSongInPlaylist(pId, sId);
+		}
+
+		public void LinkSongToArtist(int ArtistId, int SongId)
+		{
+			repository.LinkSongToArtist(ArtistId, SongId);
 		}
     }
 }

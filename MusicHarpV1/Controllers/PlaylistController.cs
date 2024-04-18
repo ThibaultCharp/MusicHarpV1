@@ -23,14 +23,6 @@ namespace PresentationLayer.Controllers
             _playlistRepository = new PlaylistRepository();
         }
 
-
-        public IActionResult ViewSongsInPlaylist(int id)
-		{
-			PlaylistSongsViewModel playlistSongsViewModel = new PlaylistSongsViewModel();
-			playlistSongsViewModel.songList = playlistBusinessLogic.GetSongsFromPlaylist(id);
-			return View(playlistSongsViewModel);
-		}
-
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{

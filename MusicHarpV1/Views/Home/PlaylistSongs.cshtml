@@ -1,5 +1,7 @@
 ﻿@model PresentationLayer.Models.PlaylistSongsViewModel
-
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 <html>
@@ -9,81 +11,191 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: black;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-container {
+            width: 20%; /* Adjust as needed */
+            float: left;
+            margin-right: 5px; /* Add spacing between containers */
+            background-color: #121212;
+            height: 100%;
+            position: fixed;
+            border-radius: 10px;
+        }
+
+
+        .main-container {
+            width: 78%; /* Adjust as needed */
+            float: right;
+            margin right: 10%;
+            background-color: #121212;
+            border-radius: 10px;
         }
 
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
+            color: white;
         }
 
         p {
             font-size: 16px;
-            line-height: 1.5;
+            color: grey;
         }
 
         form {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            background-color: #232323;
         }
 
         input[type="text"] {
-            width: 100%;
+            width: 80%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 10px;
+            background-color: #232323;
+            color: white;
         }
 
         input[type="submit"] {
-            background-color: #007bff;
             color: #ffffff;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            margin-bottom: 2%;
+            background-color: #232323;
         }
 
         article {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background-color: #232323;
+            width: 80%;
+            display: flex; /* Use flexbox */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Distribute items evenly */
         }
 
+        .song-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .song-info p {
+                margin: 0;
+            }
+
+        .Add_to_playlist_btn {
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
+        }
+
+        .article_container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .Add_to_playlist_btn {
+            background-color: #232323;
+        }
+
+        .Add_to_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
+
+        .create_new_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <a href="@Url.Action("Playlist")" class="btn btn-primary">Back</a>
-    <hr>
-    <h1>Song List</h1>
+    <div class="left-container">
+        <a href="@Url.Action("Playlist")" class="Add_to_playlist_btn">Back</a>
+        <a href="@Url.Action("Index")" class="Add_to_playlist_btn">Home</a>
+    </div>
+    <div class="main-container">
+        <head>
+            <title>Song List</title>
+        </head>
+        <body>
 
-
-    <table>
-        <tbody>
-            @foreach (var song in Model.songList)
-            {
-                <article>
-                    <p>@song.SongName, @song.ArtistName</p>
-
-                    <form action="SelectPlayListToAddSong" method="post">
-                        <input type="hidden" name="sId" value="@song.Id">
-                        <iframe width="500" height="75"
-                                src="@song.SongUrl"></iframe>
-                    </form>
-                </article>
-            }
-
-        </tbody>
-    </table>
+            <table>
+                <body>
+                    <div class="article_container">
+                        <h1>Song List</h1>
+                        @foreach (var song in Model.songs)
+                        {
+                            <article>
+                                <div class="song-info">
+                                    <p>@song.SongName, @song.ArtistName</p>
+                                </div>
+                                <iframe style="border-radius: 12px;"
+                                        src="@song.SongUrl" width="100%" height="80" frameborder="0" allowfullscreen="
+                        " allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                        loading="lazy"></iframe>
+                            </article>
+                        }
+                    </div>
+                </body>
+            </table>
+        </body>
+    </div>
 </body>
 </html>

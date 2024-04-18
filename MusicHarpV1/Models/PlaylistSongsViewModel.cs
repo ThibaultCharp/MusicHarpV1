@@ -4,7 +4,7 @@ namespace PresentationLayer.Models
 {
     public class PlaylistSongsViewModel
     {
-        public List<Song> songList { get; set; }
+        public List<Song> songs { get; set; }
     }
     
 }

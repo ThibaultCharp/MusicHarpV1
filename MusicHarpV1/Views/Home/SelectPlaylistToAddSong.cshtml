@@ -1,87 +1,174 @@
 ﻿@model PresentationLayer.Models.AddSongToPlaylistViewModel
 
+@{
+    Layout = null;
+}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Playlist List</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: black;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-container {
+            width: 20%; /* Adjust as needed */
+            float: left;
+            margin-right: 5px; /* Add spacing between containers */
+            background-color: #121212;
+            height: 100%;
+            position: fixed;
+            border-radius: 10px;
+        }
+
+
+        .main-container {
+            width: 78%; /* Adjust as needed */
+            float: right;
+            margin right: 10%;
+            background-color: #121212;
+            border-radius: 10px;
         }
 
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
+            color: white;
         }
 
         p {
             font-size: 16px;
-            line-height: 1.5;
+            color: grey;
         }
 
         form {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            background-color: #232323;
         }
 
         input[type="text"] {
-            width: 100%;
+            width: 80%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-bottom: 10px;
+            background-color: #232323;
         }
 
         input[type="submit"] {
-            background-color: #007bff;
             color: #ffffff;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            margin-bottom: 2%;
+            background-color: #232323;
         }
 
         article {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background-color: #232323;
+            width: 80%;
+        }
+
+        .article_container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .Add_to_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
+
+        .create_new_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
         }
 
     </style>
 </head>
 <body>
-    <a href="@Url.Action("Index")" class="btn btn-primary">Back</a>
-    <hr>
-    <h1>Playlist List</h1>
+    <div class="left-container">
+        <a href="@Url.Action("Index")" class="create_new_playlist_btn">Back</a>
+    </div>
+    <div class="main-container">
 
 
-    <table>
-        <tbody>
-            @foreach (var playlist in Model.playlistViewModel.PlaylistList)
-            {
-                <article>
-                    <p>@playlist.Name</p>
-                    <form asp-action="AddSongToPlaylist" method="post">
-                        <input type="hidden" name="pId" value="@playlist.Id">
-                        <a href="@Url.Action("AddSongToPlaylist", new { pId = playlist.Id, sId = Model.sId})" class="btn btn-primary">Add</a>
-                    </form>
-                </article>
-            }
-        </tbody>
-    </table>
+        <table>
+            <body>
+                <div class="article_container">
 
-
+                    <h1>Playlist List</h1>
+                    @foreach (var playlist in Model.playlistViewModel.PlaylistList)
+                    {
+                        <article>
+                            <p>@playlist.Name</p>
+                            <form asp-action="AddSongToPlaylist" method="post">
+                                <input type="hidden" name="pId" value="@playlist.Id">
+                                <a href="@Url.Action("AddSongToPlaylist", new { pId = playlist.Id, sId = Model.sId})" class="create_new_playlist_btn">Add</a>
+                            </form>
+                        </article>
+                    }
+                </div>
+               
+            </body>
+        </table>
+    </div>
 </body>
 </html>

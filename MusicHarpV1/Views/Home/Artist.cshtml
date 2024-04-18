@@ -1,4 +1,4 @@
-﻿@model PresentationLayer.Models.EditPlaylistViewModel
+﻿@model PresentationLayer.Models.ArtistViewModel
 
 @{
     Layout = null;
@@ -139,11 +139,34 @@
             margin-bottom: 10px;
         }
 
+        .create_new_playlist_btn {
+            background-color: grey;
+            border-radius: 8px;
+            border-width: 0;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="left-container">
-        <a href="@Url.Action("Playlist")" class="Add_to_playlist_btn">Back</a>
+        <a href="@Url.Action("Index")" class="Add_to_playlist_btn">Home</a>
     </div>
     <div class="main-container">
         <head>
@@ -154,12 +177,19 @@
             <table>
                 <body>
                     <div class="article_container">
-                        <h1>Change playlist name</h1>
-                        <form asp-action="SaveEditedPlaylist" method="post">
-                            <input type="hidden" name="id" value="@Model.playlist.Id">
-                            <input type="text" name="name" placeholder="@Model.playlist.Name">
-                            <input type="submit" class="btn btn-outline-dark" value="Save">
+                        <form asp-action="CreateArtist" method="post">
+                            <input type="text" name="Name" placeholder="Artist name">
+                            <input type="submit" value="Create artist">
                         </form>
+                        <h1>Artist list</h1>
+                        @foreach (var artist in Model.artists)
+                        {
+                            <article>
+                                <div class="song-info">
+                                    <p>@artist.Name</p>
+                                </div>
+                            </article>
+                        }
                     </div>
                 </body>
             </table>

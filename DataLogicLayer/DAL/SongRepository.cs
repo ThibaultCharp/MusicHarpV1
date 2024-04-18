@@ -14,6 +14,39 @@ namespace DataLogicLayer.DAL
     {
         DatabaseConnection _dbConnection = new DatabaseConnection();
 
+        public List<Song> GetSongsWithoutArtist()
+        {
+            var songs = new List<Song>();   
+
+            if (_dbConnection.OpenConnection())
+            {
+                string query = "SELECT songs.id, songs.name AS song_name, songs.song_url " +
+                    "FROM songs " +
+                    "WHERE songs.id " +
+                    "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.id DESC ";
+
+                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Song song = new Song
+                            {
+                                Id = Convert.ToInt32(reader["id"]),
+                                SongName = reader["song_name"].ToString(),
+                                SongUrl = reader["song_url"].ToString()
+                            };
+                            songs.Add(song);
+                        }
+                    }
+                }
+                _dbConnection.CloseConnection();
+            }
+            return songs;
+
+        }
+
         public List<Song> GetAllSongs()
         {
             var songs = new List<Song>();
@@ -36,7 +69,7 @@ namespace DataLogicLayer.DAL
                                 Id = Convert.ToInt32(reader["id"]),
                                 SongName = reader["song_name"].ToString(),
                                 ArtistName = reader["artist_name"].ToString(),
-                                SongUrl = reader["song_url"].ToString(),
+                                SongUrl = reader["song_url"].ToString()
                             };
                             songs.Add(song);
                         }
@@ -109,6 +142,38 @@ namespace DataLogicLayer.DAL
                     cmd.Parameters.AddWithValue("@sId", sId);
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        public void LinkSongToArtist(int ArtistId, int SongId)
+        {
+            string query = "INSERT INTO `artist_songs`(`id`, `artist_id`, `song_id`) VALUES ('',@ArtistId,@SongId)";
+            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@ArtistId", ArtistId);
+                    cmd.Parameters.AddWithValue("@SongId", SongId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        public void CreateNewSong(Song song)
+        {
+            string query = "INSERT INTO `songs`(`id`, `name`, `song_url`) VALUES ('',@Name,@Url)";
+            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Name", song.SongName);
+                    cmd.Parameters.AddWithValue("@Url", song.SongUrl);
+                    cmd.ExecuteNonQuery();
+                }
+                _dbConnection.CloseConnection();
             }
         }
     }
