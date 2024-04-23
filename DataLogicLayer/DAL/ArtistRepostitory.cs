@@ -1,21 +1,22 @@
-﻿using DataLogicLayer.Entitys;
+﻿using BusinessLogicLayer.EntityDTO_s;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Repo_Interfaces;
 
 namespace DataLogicLayer.DAL
 {
-    public class ArtistRepostitory
+    public class ArtistRepostitory : IArtistRepository
     {
         DatabaseConnection _dbConnection = new DatabaseConnection();
 
 
-        public List<Artist> GetAllArtists()
+        public List<ArtistDTO> GetAllArtists()
         {
-            var artists = new List<Artist>();
+            var artists = new List<ArtistDTO>();
 
             if (_dbConnection.OpenConnection())
             {
@@ -27,7 +28,7 @@ namespace DataLogicLayer.DAL
                     {
                         while (reader.Read())
                         {
-                            Artist artist = new Artist
+                            ArtistDTO artist = new ArtistDTO
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 Name = reader["name"].ToString(),
@@ -41,18 +42,18 @@ namespace DataLogicLayer.DAL
             return artists;
         }
 
-        public void CreateNewArtist(Artist artist)
+        public void CreateNewArtist(ArtistDTO artist)
         {
-            string query = "INSERT INTO `artists`(`id`, `name`) VALUES ('',@Name)";
-            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            if (_dbConnection.OpenConnection())
             {
-                connection.Open();
-                using (var cmd = new MySqlCommand(query, connection))
+                string query = "INSERT INTO `artists`(`id`, `name`) VALUES ('',@Name)";
+                using (var command = new MySqlCommand(query, _dbConnection.connection))
                 {
-                    cmd.Parameters.AddWithValue("@Name", artist.Name);
-                    cmd.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("@Name", artist.Name);
+                    command.ExecuteNonQuery();
                 }
                 _dbConnection.CloseConnection();
+
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using DataLogicLayer.Entitys;
+﻿using BusinessLogicLayer.EntityDTO_s;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -7,16 +7,17 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Media;
+using BusinessLogicLayer.Repo_Interfaces;
 
 namespace DataLogicLayer.DAL
 {
-    public class SongRepository
+    public class SongRepository : ISongRepository
     {
         DatabaseConnection _dbConnection = new DatabaseConnection();
 
-        public List<Song> GetSongsWithoutArtist()
+        public List<SongDTO> GetSongsWithoutArtist()
         {
-            var songs = new List<Song>();   
+            var songs = new List<SongDTO>();   
 
             if (_dbConnection.OpenConnection())
             {
@@ -31,7 +32,7 @@ namespace DataLogicLayer.DAL
                     {
                         while (reader.Read())
                         {
-                            Song song = new Song
+                            SongDTO song = new SongDTO
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 SongName = reader["song_name"].ToString(),
@@ -47,9 +48,9 @@ namespace DataLogicLayer.DAL
 
         }
 
-        public List<Song> GetAllSongs()
+        public List<SongDTO> GetAllSongs()
         {
-            var songs = new List<Song>();
+            var songs = new List<SongDTO>();
 
             if (_dbConnection.OpenConnection())
             {
@@ -64,7 +65,7 @@ namespace DataLogicLayer.DAL
                     {
                         while (reader.Read())
                         {
-                            Song song = new Song
+                            SongDTO song = new SongDTO
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 SongName = reader["song_name"].ToString(),
@@ -83,9 +84,9 @@ namespace DataLogicLayer.DAL
 
 
 
-        public List<Song> GetSearchedSongs(string input)
+        public List<SongDTO> GetSearchedSongs(string input)
         {
-            var songs = new List<Song>();
+            var songs = new List<SongDTO>();
 
             if (_dbConnection.OpenConnection())
             {
@@ -110,7 +111,7 @@ namespace DataLogicLayer.DAL
                     {
                         while (reader.Read())
                         {
-                            Song song = new Song
+                            SongDTO song = new SongDTO
                             {
                                 SongName = reader["song_name"].ToString(),
                                 ArtistName = reader["artist_name"].ToString(),
@@ -161,7 +162,7 @@ namespace DataLogicLayer.DAL
 
         }
 
-        public void CreateNewSong(Song song)
+        public void CreateNewSong(SongDTO song)
         {
             string query = "INSERT INTO `songs`(`id`, `name`, `song_url`) VALUES ('',@Name,@Url)";
             using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))

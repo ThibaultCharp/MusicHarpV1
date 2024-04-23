@@ -1,31 +1,39 @@
-﻿using DataLogicLayer.DAL;
-using DataLogicLayer.Entitys;
-using Org.BouncyCastle.Utilities;
+﻿using BusinessLogicLayer.Entitys;
+using BusinessLogicLayer.EntityDTO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Repo_Interfaces;
 
 namespace BusinessLogicLayer.Classes
 {
     public class PlaylistBusinessLogic
     {
-        List<Playlist> playlists = new List<Playlist>();
+        List<PlaylistDTO> playlistDTOs = new List<PlaylistDTO>();
+        List<SongDTO> songDTOs = new List<SongDTO>();
 
-        private PlaylistRepository repository = new PlaylistRepository();
+        private readonly IPlaylistRepository repository;
+
+        public PlaylistBusinessLogic(IPlaylistRepository playlistRepository)
+        {
+            repository = playlistRepository;
+        }
 
         public List<Playlist> GetSelectedPlaylists()
         {
-            playlists = repository.GetSelectedPlaylists();
+            playlistDTOs = repository.GetSelectedPlaylists();
+            List<Playlist> playlists = playlistDTOs.Select(dto => new Playlist(dto)).ToList();
             return playlists;
         }
 
-        public Playlist CreateNewPlaylist(Playlist playlist)
+        public PlaylistDTO CreateNewPlaylist(Playlist playlist)
         {
-            repository.CreateNewPlaylist(playlist);
-            return playlist;
+            PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
+            repository.CreateNewPlaylist(playlistDTO);
+            return playlistDTO;
         }
 
         public void DeletePlaylist(int id)
@@ -34,18 +42,22 @@ namespace BusinessLogicLayer.Classes
         }
 
         public Playlist EditPlaylist(int id)
-        {    
-            return repository.GetWantedPlaylist(id); 
+        {  
+            PlaylistDTO playlistDTO = repository.GetWantedPlaylist(id);
+            return new Playlist(playlistDTO); 
         }
 
         public void SaveEditedPlaylist(Playlist playlist)
         {
-            repository.SaveEditedPlaylist(playlist);
+            PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
+            repository.SaveEditedPlaylist(playlistDTO);
         }
 
         public List<Song> GetSongsFromPlaylist(int id)
         {
-            return repository.GetSongsInPlaylist(id);
+            songDTOs = repository.GetSongsInPlaylist(id);
+            List<Song> songs = songDTOs.Select(dto => new Song(dto)).ToList();
+            return songs;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using DataLogicLayer.Entitys;
-
+﻿using BusinessLogicLayer.Entitys;
 namespace MusicHarpV1.Models
 {
     public class SongViewModel

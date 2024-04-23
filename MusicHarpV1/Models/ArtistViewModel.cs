@@ -1,4 +1,4 @@
-﻿using DataLogicLayer.Entitys;
+﻿using BusinessLogicLayer.Entitys;
 
 namespace PresentationLayer.Models
 {

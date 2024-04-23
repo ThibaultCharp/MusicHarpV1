@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using MusicHarpV1.Models;
 using System.Diagnostics;
 using BusinessLogicLayer.Classes;
-using DataLogicLayer.Entitys;
+using BusinessLogicLayer.Entitys;
 using PresentationLayer.Models;
 using DataLogicLayer.DAL;
 using System.Reflection.Metadata;
+using BusinessLogicLayer.Repo_Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 
 namespace MusicHarpV1.Controllers
 {
@@ -17,11 +19,10 @@ namespace MusicHarpV1.Controllers
         {
             _logger = logger;
         }
-
-
-        SongBusinessLogic songBusinessLogic = new SongBusinessLogic();
-        PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic();
-        ArtistBusinessLogic artistBusinessLogic = new ArtistBusinessLogic();
+        
+        SongBusinessLogic songBusinessLogic = new SongBusinessLogic(new SongRepository());
+        PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic(new PlaylistRepository());
+        ArtistBusinessLogic artistBusinessLogic = new ArtistBusinessLogic(new ArtistRepostitory());
 
         public IActionResult Index(string input)
         {

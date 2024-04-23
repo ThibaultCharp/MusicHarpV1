@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using MusicHarpV1.Controllers;
 using BusinessLogicLayer.Classes;
-using DataLogicLayer.Entitys;
+using BusinessLogicLayer.Entitys;
 using PresentationLayer.Models;
 
 namespace PresentationLayer.Controllers
@@ -15,7 +15,7 @@ namespace PresentationLayer.Controllers
 	{
 
 
-		PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic();
+		PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic(new PlaylistRepository());
         private readonly PlaylistRepository _playlistRepository;
 
         public PlaylistController()

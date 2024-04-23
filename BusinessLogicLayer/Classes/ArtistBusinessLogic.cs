@@ -1,28 +1,37 @@
-﻿using DataLogicLayer.DAL;
-using DataLogicLayer.Entitys;
+﻿using BusinessLogicLayer.Entitys;
+using BusinessLogicLayer.EntityDTO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Repo_Interfaces;
 
 namespace BusinessLogicLayer.Classes
 {
     public class ArtistBusinessLogic
     {
-        List<Artist> artists = new List<Artist>();
-        ArtistRepostitory repository = new ArtistRepostitory();
+        List<ArtistDTO> artistDTOs = new List<ArtistDTO>();
+        
+        private readonly IArtistRepository repository;
+
+        public ArtistBusinessLogic(IArtistRepository artistRepository)
+        {
+            repository = artistRepository;
+        }
 
         public List<Artist> GetAllArtists()
         {
-            artists = repository.GetAllArtists();
+            artistDTOs = repository.GetAllArtists();
+            List<Artist> artists = artistDTOs.Select(dto => new Artist(dto)).ToList();
             return artists;
         }
 
-        public Artist CreateNewArtist(Artist artist)
+        public ArtistDTO CreateNewArtist(Artist artist)
         {
-            repository.CreateNewArtist(artist);
-            return artist;
+            ArtistDTO artistDTO = new ArtistDTO(artist);
+            repository.CreateNewArtist(artistDTO);
+            return artistDTO;
         }
 
     }
