@@ -1,5 +1,4 @@
-﻿@model PresentationLayer.Models.PlaylistViewModel
-
+﻿@model SongViewModel
 @{
     Layout = null;
 }
@@ -11,6 +10,8 @@
         body {
             font-family: Arial, sans-serif;
             background-color: black;
+
+
         }
 
         .container {
@@ -21,7 +22,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .left-container {
+        .left-container{
             width: 20%; /* Adjust as needed */
             float: left;
             margin-right: 5px; /* Add spacing between containers */
@@ -30,7 +31,7 @@
             position: fixed;
             border-radius: 10px;
         }
-
+        
 
         .main-container {
             width: 78%; /* Adjust as needed */
@@ -63,6 +64,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: #232323;
+            color: white;
         }
 
         input[type="submit"] {
@@ -73,6 +75,7 @@
             cursor: pointer;
             margin-bottom: 2%;
             background-color: #232323;
+
         }
 
         article {
@@ -82,16 +85,58 @@
             border-radius: 10px;
             background-color: #232323;
             width: 80%;
+            display: flex; /* Use flexbox */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Distribute items evenly */
         }
 
-        .article_container {
+            article:hover {
+                background-color: black;
+            }
+
+
+            article p {
+                width: 100px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                color: grey;
+            }
+
+                article p:hover {
+                    width: 200px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    color: grey;
+                }
+
+        .song-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .song-info p {
+                margin: 0;
+            }
+
+        .Add_to_playlist_btn {
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
+        }
+
+        .article_container{
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items:center;
         }
 
+        .Add_to_playlist_btn{
+            background-color: #232323;
+        }
 
         .Add_to_playlist_btn {
             background-color: grey;
@@ -140,42 +185,47 @@
             touch-action: manipulation;
             margin-bottom: 10px;
         }
-
     </style>
 </head>
 <body>
     <div class="left-container">
-        <a href="@Url.Action("HomePage")" class="create_new_playlist_btn">Back</a>
+        <a href="@Url.Action("Playlist")" class="Add_to_playlist_btn">My playlists</a>
+        <a href="@Url.Action("SongsWithoutArtist")" class="Add_to_playlist_btn">Songs to link</a>
+        <a href="@Url.Action("Artist")" class="Add_to_playlist_btn">Artists</a>
     </div>
     <div class="main-container">
+        <head>
+            <title>Song List</title>
+        </head>
+        <body>
 
+            <table>
+                <body>
+                    <div class="article_container">
+                        <h1>All songs</h1>
+                        <form asp-action="HomePage" method="post">
+                            <input type="text" name="Input" placeholder="Search song or artist">
+                            <input type="submit" class="btn btn-outline-dark" value="Search">
+                        </form>
+                        @foreach (var song in Model.songList)
+                        {
+                            <article>
+                                <div class="song-info">
+                                    <p>@song.SongName</p>
+                                    <p>@song.ArtistName</p>
 
-        <table>
-            <body>
-                <div class="article_container">
-
-                    <h1>Playlist List</h1>
-
-                    <form asp-action="CreatePlaylist" method="post">
-                        <input type="text" name="Name" placeholder="Playlist name">
-                        <input type="submit" class="btn btn-outline-dark" value="Create">
-                    </form>
-                    @foreach (var playlist in Model.PlaylistList)
-                    {
-                        <article>
-                            <p>@playlist.Name</p>
-                            <form action="DeletePlaylist" method="post">
-                                <input type="hidden" name="id" value="@playlist.Id">
-                                <button type="submit" class="Add_to_playlist_btn">Delete</button>
-                                <a href="@Url.Action("EditPlaylist", new { id = playlist.Id })" class="Add_to_playlist_btn">Edit</a>
-                                <a href="@Url.Action("PlaylistSongs", new { id = playlist.Id })" class="Add_to_playlist_btn">Songs</a>
-                            </form>
-                        </article>
-                    }
-                </div>
-               
-            </body>
-        </table>
+                                    <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="Add_to_playlist_btn" style="width: 100px; display: inline-block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Add to a playlist</a>
+                                </div>
+                                <iframe style="border-radius: 12px; margin-left: 15px;" 
+                                src="@song.SongUrl" width="100%" height="80" frameborder="0" allowfullscreen="
+                                " allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                                loading="lazy"> </iframe>
+                            </article>
+                        }
+                    </div>
+                </body>
+            </table>
+        </body>
     </div>
 </body>
 </html>

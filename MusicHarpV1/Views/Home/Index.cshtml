@@ -1,208 +1,69 @@
-﻿@model SongViewModel
-@{
+﻿@{
     Layout = null;
 }
-
+@model ErrorViewModel
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: black;
 
-
+        body{
+            background-color: #121212;
         }
-
+        /* Basic styling for the login container */
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 5px;
+            max-width: 400px;
+            margin-top: 12%;
+            margin-left: 35%;
+            padding: 30px;
+            background-color: #333; /* Dark background color */
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #fff; /* Text color for dark mode */
         }
 
-        .left-container{
-            width: 20%; /* Adjust as needed */
-            float: left;
-            margin-right: 5px; /* Add spacing between containers */
-            background-color: #121212;
-            height: 100%;
-            position: fixed;
-            border-radius: 10px;
-        }
-        
-
-        .main-container {
-            width: 78%; /* Adjust as needed */
-            float: right;
-            margin right: 10%;
-            background-color: #121212;
-            border-radius: 10px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        p {
-            font-size: 16px;
-            color: grey;
-        }
-
-        form {
-            margin-bottom: 10px;
-            background-color: #232323;
-        }
-
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #232323;
-            color: white;
-        }
-
-        input[type="submit"] {
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 2%;
-            background-color: #232323;
-
-        }
-
-        article {
-            border: 1px solid black;
-            padding: 20px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            background-color: #232323;
-            width: 80%;
-            display: flex; /* Use flexbox */
-            align-items: center; /* Vertically center items */
-            justify-content: space-between; /* Distribute items evenly */
-        }
-
-        .song-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-            .song-info p {
-                margin: 0;
-            }
-
-        .Add_to_playlist_btn {
-            margin-left: 10px; /* Add some spacing between the button and text */
-            margin-right: 10px;
-            padding-block-end: 10px;
-        }
-
-        .article_container{
+        /* Style for the input fields */
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items:center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #444; /* Darker input background color */
+            color: #fff; /* Text color for dark mode */
         }
 
-        .Add_to_playlist_btn{
-            background-color: #232323;
-        }
-
-        .Add_to_playlist_btn {
-            background-color: grey;
-            border-radius: 8px;
-            border-width: 0;
-            color: black;
+        /* Style for the submit button */
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            display: inline-block;
-            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 20px;
-            list-style: none;
-            margin: 0;
-            padding: 10px 12px;
-            text-align: center;
-            transition: all 200ms;
-            vertical-align: baseline;
-            white-space: nowrap;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            margin-bottom: 10px;
         }
 
-        .create_new_playlist_btn {
-            background-color: grey;
-            border-radius: 8px;
-            border-width: 0;
-            color: black;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 20px;
-            list-style: none;
-            margin: 0;
-            padding: 10px 12px;
-            text-align: center;
-            transition: all 200ms;
-            vertical-align: baseline;
-            white-space: nowrap;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            margin-bottom: 10px;
-        }
+            /* Hover effect for the submit button */
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
     </style>
 </head>
 <body>
-    <div class="left-container">
-        <a href="@Url.Action("Playlist")" class="Add_to_playlist_btn">My playlists</a>
-        <a href="@Url.Action("SongsWithoutArtist")" class="Add_to_playlist_btn">Songs to link</a>
-        <a href="@Url.Action("Artist")" class="Add_to_playlist_btn">Artists</a>
-    </div>
-    <div class="main-container">
-        <head>
-            <title>Song List</title>
-        </head>
-        <body>
-
-            <table>
-                <body>
-                    <div class="article_container">
-                        <h1>All songs</h1>
-                        <form asp-action="Index" method="post">
-                            <input type="text" name="Input" placeholder="Search song or artist">
-                            <input type="submit" class="btn btn-outline-dark" value="Search">
-                        </form>
-                        @foreach (var song in Model.songList)
-                        {
-                            <article>
-                                <div class="song-info">
-                                    <p>@song.SongName, @song.ArtistName</p>
-                                    <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="Add_to_playlist_btn">Add to a playlist</a>
-                                </div>
-                                <iframe style="border-radius: 12px;" 
-                                src="@song.SongUrl" width="100%" height="80" frameborder="0" allowfullscreen="
-                                " allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                                loading="lazy"></iframe>
-                            </article>
-                        }
-                    </div>
-                </body>
-            </table>
-        </body>
+    <div class="container">
+        <h1 class="text-center">Login</h1>
+        <form action="/Login/login" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
     </div>
 </body>
 </html>
+
+@* <div class="visme_d" data-title="Company News Subscription" data-url="n08y64v7-company-news-subscription?fullPage=true" data-domain="forms" data-full-page="true" data-min-height="100vh" data-form-id="63998"></div><script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script> *@

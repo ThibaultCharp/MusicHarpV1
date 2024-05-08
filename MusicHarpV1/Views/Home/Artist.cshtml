@@ -166,7 +166,7 @@
 </head>
 <body>
     <div class="left-container">
-        <a href="@Url.Action("Index")" class="Add_to_playlist_btn">Home</a>
+        <a href="@Url.Action("HomePage")" class="Add_to_playlist_btn">Home</a>
     </div>
     <div class="main-container">
         <head>
@@ -186,7 +186,9 @@
                         {
                             <article>
                                 <div class="song-info">
-                                    <p>@artist.Name</p>
+                                    <form asp-action="DeletePlaylist" method="post">
+                                        <a href="@Url.Action("ArtistSongs", new { id = artist.Id })" class="Add_to_playlist_btn">@artist.Name</a>
+                                    </form>
                                 </div>
                             </article>
                         }

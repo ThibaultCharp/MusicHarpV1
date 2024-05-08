@@ -11,6 +11,7 @@ namespace BusinessLogicLayer.Repo_Interfaces
     {
         List<ArtistDTO> GetAllArtists();
         void CreateNewArtist(ArtistDTO artist);
+        List<SongDTO> SongsFromArtist(int id);
 
     }
 }

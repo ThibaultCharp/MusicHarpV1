@@ -12,6 +12,7 @@ namespace BusinessLogicLayer.Classes
     public class ArtistBusinessLogic
     {
         List<ArtistDTO> artistDTOs = new List<ArtistDTO>();
+        List<SongDTO> songDTOs = new List<SongDTO>();
         
         private readonly IArtistRepository repository;
 
@@ -34,5 +35,11 @@ namespace BusinessLogicLayer.Classes
             return artistDTO;
         }
 
+        public List<Song> GetSongsFromArtist(int id)
+        {
+            songDTOs = repository.SongsFromArtist(id);
+            List<Song> songs = songDTOs.Select(dto => new Song(dto)).ToList();
+            return songs;
+        }
     }
 }

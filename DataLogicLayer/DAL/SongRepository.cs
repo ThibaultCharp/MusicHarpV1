@@ -24,7 +24,7 @@ namespace DataLogicLayer.DAL
                 string query = "SELECT songs.id, songs.name AS song_name, songs.song_url " +
                     "FROM songs " +
                     "WHERE songs.id " +
-                    "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.id DESC ";
+                    "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.name ASC ";
 
                 using (var command = new MySqlCommand(query, _dbConnection.connection))
                 {
@@ -57,7 +57,7 @@ namespace DataLogicLayer.DAL
                 var query = "SELECT songs.name AS song_name, songs.song_url, artists.name AS artist_name, songs.id " +
                     "FROM songs JOIN artist_songs ON songs.id = artist_songs.song_id " +
                     "JOIN artists ON artist_songs.artist_id = artists.id " +
-                    "ORDER BY songs.id DESC";
+                    "ORDER BY songs.name ASC";
 
                 using (var command = new MySqlCommand(query, _dbConnection.connection))
                 {

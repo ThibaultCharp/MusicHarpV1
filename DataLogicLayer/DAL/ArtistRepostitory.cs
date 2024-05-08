@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Repo_Interfaces;
+using System.Xml.Linq;
 
 namespace DataLogicLayer.DAL
 {
@@ -56,5 +57,35 @@ namespace DataLogicLayer.DAL
 
             }
         }
+
+        public List<SongDTO> SongsFromArtist(int id)
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+
+            string query = "SELECT artist_songs.artist_id, songs.id AS song_id, songs.name AS song_name, songs.song_url " +
+                           "FROM artist_songs " +
+                           "JOIN songs ON artist_songs.song_id = songs.id " +
+                           "WHERE artist_songs.artist_id = @id";
+
+            if (_dbConnection.OpenConnection())
+            {
+                MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    SongDTO song = new SongDTO();
+                    song.SongName = dataReader["song_name"].ToString();
+                    song.SongUrl = dataReader["song_url"].ToString();
+                    songs.Add(song);
+                }
+                dataReader.Close();
+                _dbConnection.CloseConnection();
+            }
+            return songs;
+        }
+
+
     }
 }

@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Repo_Interfaces;
+using System.Xml.Linq;
 
 
 namespace DataLogicLayer.DAL
@@ -18,17 +19,20 @@ namespace DataLogicLayer.DAL
 	{
 		DatabaseConnection _dbConnection = new DatabaseConnection();
 
-		public List<PlaylistDTO> GetSelectedPlaylists()
+		public List<PlaylistDTO> GetSelectedPlaylists(int? user_id)
 		{
 			var playlists = new List<PlaylistDTO>();
 
 			if (_dbConnection.OpenConnection())
-			{
-				string query = "SELECT * FROM `playlists` ORDER BY id DESC";
+            {
+				string query = "SELECT * FROM `playlists` WHERE @User_id = playlists.user_id ORDER BY playlists.id DESC"; 
 
-				using (var command = new MySqlCommand(query, _dbConnection.connection))
+
+                using (var command = new MySqlCommand(query, _dbConnection.connection))
 				{
-					using (var reader = command.ExecuteReader())
+                    command.Parameters.AddWithValue("@User_id", user_id);
+
+                    using (var reader = command.ExecuteReader())
 					{
 						while (reader.Read())
 						{
@@ -46,16 +50,17 @@ namespace DataLogicLayer.DAL
 			return playlists;
 		}
 
-        public PlaylistDTO GetWantedPlaylist(int id)
+        public PlaylistDTO GetWantedPlaylist(int id, int? user_id)
         {
             PlaylistDTO playlist = new PlaylistDTO();
 
             if (_dbConnection.OpenConnection())
             {
-                string query = "SELECT id, name FROM playlists WHERE id = @id";
+                string query = "SELECT playlists.id, name FROM playlists WHERE @User_id = playlists.user_id";
 
                 using (var command = new MySqlCommand(query, _dbConnection.connection))
                 {
+                    command.Parameters.AddWithValue("@User_id", user_id);
                     command.Parameters.AddWithValue("@id", id);
                     command.ExecuteNonQuery();
                     using (var reader = command.ExecuteReader())
@@ -73,14 +78,16 @@ namespace DataLogicLayer.DAL
         }
 
 
-        public void CreateNewPlaylist(PlaylistDTO playlist)
+        public void CreateNewPlaylist(PlaylistDTO playlist, int? user_id)
 		{
             if (_dbConnection.OpenConnection())
 			{
-                string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, '5')";
+                string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, @User_id)";
+
                 using (var command = new MySqlCommand(query, _dbConnection.connection))
 				{
                     command.Parameters.AddWithValue("@Name", playlist.Name);
+                    command.Parameters.AddWithValue("@User_id", user_id);
                     command.ExecuteNonQuery();
                 }
 				_dbConnection.CloseConnection();
@@ -135,11 +142,13 @@ namespace DataLogicLayer.DAL
         {
             List<SongDTO> songs = new List<SongDTO>();
 
-            string query = "SELECT name, song_url " +
-                            "FROM songs " +
-                            "JOIN playlist_songs ON songs.id = playlist_songs.song_id " +
-                            "WHERE playlist_songs.playlist_id = @id";
-			if (_dbConnection.OpenConnection())
+            string query = "SELECT songs.name AS song_name, songs.song_url, artists.name AS artist_name, songs.id " +
+                               "FROM songs " +
+                               "JOIN artist_songs ON songs.id = artist_songs.song_id " +
+                               "JOIN artists ON artist_songs.artist_id = artists.id " +
+                               "JOIN playlist_songs ON songs.id = playlist_songs.song_id " + 
+                               "WHERE playlist_songs.playlist_id = @id";
+            if (_dbConnection.OpenConnection())
             {
 
                 MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
@@ -149,9 +158,9 @@ namespace DataLogicLayer.DAL
                 while (dataReader.Read())
                 {
                     SongDTO song = new SongDTO();
-                    song.SongName = dataReader["name"].ToString();
+                    song.SongName = dataReader["song_name"].ToString();
                     song.SongUrl = dataReader["song_url"].ToString();
-					
+                    song.ArtistName = dataReader["artist_name"].ToString();
                     songs.Add (song);
                 }
                 dataReader.Close();

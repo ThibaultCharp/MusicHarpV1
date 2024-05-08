@@ -22,17 +22,17 @@ namespace BusinessLogicLayer.Classes
             repository = playlistRepository;
         }
 
-        public List<Playlist> GetSelectedPlaylists()
+        public List<Playlist> GetSelectedPlaylists(int? user_id)
         {
-            playlistDTOs = repository.GetSelectedPlaylists();
+            playlistDTOs = repository.GetSelectedPlaylists(user_id);
             List<Playlist> playlists = playlistDTOs.Select(dto => new Playlist(dto)).ToList();
             return playlists;
         }
 
-        public PlaylistDTO CreateNewPlaylist(Playlist playlist)
+        public PlaylistDTO CreateNewPlaylist(Playlist playlist, int? user_id)
         {
             PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
-            repository.CreateNewPlaylist(playlistDTO);
+            repository.CreateNewPlaylist(playlistDTO, user_id);
             return playlistDTO;
         }
 
@@ -41,9 +41,9 @@ namespace BusinessLogicLayer.Classes
             repository.DeletePlaylist(id);
         }
 
-        public Playlist EditPlaylist(int id)
+        public Playlist EditPlaylist(int id, int? user_id)
         {  
-            PlaylistDTO playlistDTO = repository.GetWantedPlaylist(id);
+            PlaylistDTO playlistDTO = repository.GetWantedPlaylist(id, user_id);
             return new Playlist(playlistDTO); 
         }
 

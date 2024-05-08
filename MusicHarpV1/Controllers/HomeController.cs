@@ -8,23 +8,28 @@ using DataLogicLayer.DAL;
 using System.Reflection.Metadata;
 using BusinessLogicLayer.Repo_Interfaces;
 using Microsoft.EntityFrameworkCore.Storage.Json;
+using MySql.Data.MySqlClient;
 
 namespace MusicHarpV1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        private readonly SongBusinessLogic songBusinessLogic;
+        private readonly PlaylistBusinessLogic playlistBusinessLogic;
+        private readonly ArtistBusinessLogic artistBusinessLogic;
+
+        public HomeController() 
         {
-            _logger = logger;
+            songBusinessLogic = new SongBusinessLogic(new SongRepository());
+            playlistBusinessLogic = new PlaylistBusinessLogic(new PlaylistRepository());
+            artistBusinessLogic = new ArtistBusinessLogic(new ArtistRepostitory());
         }
         
-        SongBusinessLogic songBusinessLogic = new SongBusinessLogic(new SongRepository());
-        PlaylistBusinessLogic playlistBusinessLogic = new PlaylistBusinessLogic(new PlaylistRepository());
-        ArtistBusinessLogic artistBusinessLogic = new ArtistBusinessLogic(new ArtistRepostitory());
 
-        public IActionResult Index(string input)
+
+        public IActionResult HomePage(string input)
         {
             SongViewModel songViewModel = new SongViewModel();
             List<Song> songs;
@@ -42,9 +47,20 @@ namespace MusicHarpV1.Controllers
             return View(songViewModel);
         }
 
-        public IActionResult Playlist()
+       
+        public IActionResult Index()
         {
-            List<Playlist> playlists = playlistBusinessLogic.GetSelectedPlaylists();
+            ErrorViewModel errorViewModel = new ErrorViewModel();
+
+            return View(errorViewModel);
+
+        }
+
+        public IActionResult Playlist(int? user_id)
+        {
+            user_id = HttpContext.Session.GetInt32("User_Id");
+
+            List<Playlist> playlists = playlistBusinessLogic.GetSelectedPlaylists(user_id);
 
             PlaylistViewModel playlistViewModel = new PlaylistViewModel();
             playlistViewModel.PlaylistList = playlists;
@@ -68,9 +84,10 @@ namespace MusicHarpV1.Controllers
         }
 
 
-        public IActionResult CreatePlaylist(Playlist playlist)
+        public IActionResult CreatePlaylist(Playlist playlist, int? user_id)
         {
-            playlistBusinessLogic.CreateNewPlaylist(playlist);
+            user_id = HttpContext.Session.GetInt32("User_Id");
+            playlistBusinessLogic.CreateNewPlaylist(playlist, user_id);
 
             return RedirectToAction("Playlist");
         }
@@ -101,10 +118,19 @@ namespace MusicHarpV1.Controllers
             return View(playlistSongsViewModel);
         }
 
-        public IActionResult EditPlaylist(int id) 
+        public IActionResult ArtistSongs(int id)
         {
+            ArtistSongsViewModel artistSongsViewModel = new ArtistSongsViewModel();
+            artistSongsViewModel.songs = artistBusinessLogic.GetSongsFromArtist(id);
+            return View(artistSongsViewModel);
+        }
+
+        public IActionResult EditPlaylist(int id, int? user_id) 
+        {
+            user_id = HttpContext.Session.GetInt32("User_Id");
+
             EditPlaylistViewModel editPlaylistViewModel = new EditPlaylistViewModel();
-            editPlaylistViewModel.playlist = playlistBusinessLogic.EditPlaylist(id);
+            editPlaylistViewModel.playlist = playlistBusinessLogic.EditPlaylist(id, user_id);
 
             return View(editPlaylistViewModel);
         }
@@ -115,18 +141,20 @@ namespace MusicHarpV1.Controllers
             return RedirectToAction("Playlist");
         }
 
-        public IActionResult SelectPlaylistToAddSong(int sId)
+        public IActionResult SelectPlaylistToAddSong(int sId, int? user_id)
         {
+            user_id = HttpContext.Session.GetInt32("User_Id");
+
+
             AddSongToPlaylistViewModel addSongToPlaylistViewModel = new AddSongToPlaylistViewModel();
             addSongToPlaylistViewModel.sId = sId;
-            List<Playlist> playlists = playlistBusinessLogic.GetSelectedPlaylists();
+            List<Playlist> playlists = playlistBusinessLogic.GetSelectedPlaylists(user_id);
 
             PlaylistViewModel playlistViewModel = new PlaylistViewModel();
             playlistViewModel.PlaylistList = playlists;
             addSongToPlaylistViewModel.playlistViewModel = playlistViewModel;   
             return View(addSongToPlaylistViewModel);
         }
-
 
 
         public IActionResult SelectArtistToLinkSong(int SongId)
@@ -144,13 +172,13 @@ namespace MusicHarpV1.Controllers
         public IActionResult LinkSongToArtist(int ArtistId, int SongId)
         {
             songBusinessLogic.LinkSongToArtist(ArtistId, SongId);
-            return RedirectToAction("Index");
+            return RedirectToAction("HomePage");
         }
 
         public IActionResult AddSongToPlaylist(int pId, int sId)
         {
             songBusinessLogic.InsertSongInPlaylist(pId, sId);
-            return RedirectToAction("Index");
+            return RedirectToAction("HomePage");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
