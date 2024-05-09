@@ -14,19 +14,19 @@ using Microsoft.AspNetCore.Session;
 
 namespace PresentationLayer.Controllers
 {
-    public class LoginController : Controller
+    public class UserController : Controller
     {
-        private readonly LoginBL loginService;
+        private readonly UserBL UserService;
 
-        public LoginController()
+        public UserController()
         {
-            loginService = new LoginBL(new LoginRepositiry());
+            UserService = new UserBL(new UserRepositiry());
         }
 
 
         public IActionResult Login(string username, string password)
         {
-            var (loginSuccessful, userId) = loginService.Login(username, password);
+            var (loginSuccessful, userId) = UserService.Login(username, password);
 
             if (loginSuccessful)
             {
@@ -41,5 +41,22 @@ namespace PresentationLayer.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+
+
+        public IActionResult SignUp(User user) 
+        {
+            UserService.SignUp(user);
+            return RedirectToAction("Login", "User");
+        }
+
+        public IActionResult SignUpPage() 
+        {
+            ErrorViewModel errorViewModel = new ErrorViewModel();
+
+            return View(errorViewModel);
+        }
     }
+
+    
 }

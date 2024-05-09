@@ -5,11 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Repo_Interfaces;
+using BusinessLogicLayer.EntityDTO_s;
+using BusinessLogicLayer.Entitys;
 
 namespace DataLogicLayer.DAL
 {
-    public class LoginRepositiry : ILoginRepository
+    public class UserRepositiry : IUserRepository
     {
+        DatabaseConnection _dbConnection = new DatabaseConnection();
+
         public (bool, int) Login(string username, string password)
         {
             string queryLogin = "SELECT id, name FROM users WHERE name = @Username AND password = @Password;";
@@ -48,6 +52,24 @@ namespace DataLogicLayer.DAL
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
                 return (false, 0);
+            }
+        }
+
+        public void SignUp(UserDTO user)
+        {
+            string query = "INSERT INTO `users` (`id`, `name`, `email`, `password`, `profile_picture`) VALUES (NULL, @Name, 'test@123.com', @Password, @ProfilePicture)";
+
+            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            {
+                connection.Open();
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Name", user.Name);
+                    cmd.Parameters.AddWithValue("@Password", user.Password);
+                    cmd.Parameters.AddWithValue("@ProfilePicture", user.ProfilePicture);
+                    cmd.ExecuteNonQuery();
+                }
+                _dbConnection.CloseConnection();
             }
         }
     }

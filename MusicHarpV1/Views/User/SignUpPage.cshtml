@@ -15,7 +15,7 @@
             box-sizing: border-box;
         }
 
-        .SignUp{
+        .SignUp {
             margin-top: 50px;
             width: 100%;
             background-color: #ffffff;
@@ -131,14 +131,12 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form action="/User/login" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button class="button" type="submit">Login</button>
-        <a href="@Url.Action("SignUpPage", "User")" class="SignUp" type="submit">Sign Up</a>
-
+    <form action="SignUp" method="post">
+        <input type="text" name="Name" placeholder="Username" required>
+        <input type="password" name="Password" placeholder="Password" required>
+        <input type="password" name="ProfilePicture" placeholder="Photo" required>
+        <button class="button" type="submit">Sign Up</button>
     </form>
-    
-    
 </body>
 </html>
+
