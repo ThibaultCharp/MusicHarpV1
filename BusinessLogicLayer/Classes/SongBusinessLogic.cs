@@ -54,7 +54,7 @@ namespace BusinessLogicLayer.Classes
 
 		public void InsertSongInPlaylist(int pId, int sId)
 		{
-			repository.InsertSongInPlaylist(pId, sId);
+			repository.InsertSongInPlaylist(pId, sId);	
 		}
 
 		public void LinkSongToArtist(int ArtistId, int SongId)

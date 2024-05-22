@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "MusicHarpV1\PresentationLayer.csproj", "{D007B6EA-18D1-45B4-88D0-8F34BD7FE64C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationLayer", "MusicHarpV1\PresentationLayer.csproj", "{D007B6EA-18D1-45B4-88D0-8F34BD7FE64C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{245923CC-021C-4813-A2B1-E11E8D819F6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{245923CC-021C-4813-A2B1-E11E8D819F6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLogicLayer", "DataLogicLayer\DataLogicLayer.csproj", "{77F640BD-2ADB-4743-B8EA-8C528D1AFB88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLogicLayer", "DataLogicLayer\DataLogicLayer.csproj", "{77F640BD-2ADB-4743-B8EA-8C528D1AFB88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicHarpUnitTest", "MusicHarpUnitTest\MusicHarpUnitTest.csproj", "{12EC3358-403A-46C5-AC33-C3AF03AFD4DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{77F640BD-2ADB-4743-B8EA-8C528D1AFB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77F640BD-2ADB-4743-B8EA-8C528D1AFB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77F640BD-2ADB-4743-B8EA-8C528D1AFB88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12EC3358-403A-46C5-AC33-C3AF03AFD4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12EC3358-403A-46C5-AC33-C3AF03AFD4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12EC3358-403A-46C5-AC33-C3AF03AFD4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12EC3358-403A-46C5-AC33-C3AF03AFD4DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

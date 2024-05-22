@@ -1,7 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,10 +12,7 @@ namespace DataLogicLayer
 	public class DatabaseConnection
 	{
 		public MySqlConnection connection;
-		private string server;
-		private string database;
-		private string uid;
-		private string password;
+
 
 
 		public DatabaseConnection()
@@ -24,12 +23,9 @@ namespace DataLogicLayer
 
 		private void Initialize()
 		{
-			server = "127.0.0.1";
-			database = "musicharp_db";
-			uid = "root";
-			password = "";
-			string connectionString;
-			connectionString = $"SERVER={server};DATABASE={database};UID={uid};PASSWORD={password};";
+
+            string connectionString; 
+            connectionString = "Server = studmysql01.fhict.local; Uid = dbi538679; Database = dbi538679; Password = Nsp3lEXftR;";
 
 			connection = new MySqlConnection(connectionString);
 		}
@@ -45,7 +41,6 @@ namespace DataLogicLayer
 			}
 			catch (MySqlException ex)
 			{
-
 				return false;
 			}
 		}

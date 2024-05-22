@@ -29,7 +29,12 @@
             height: 100%;
             position: fixed;
             border-radius: 10px;
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Arrange items in a column */
+            justify-content: flex-start; /* Align items at the start (top) of the container */
+            align-items: center; /* Center items horizontally */
         }
+
 
 
         .main-container {
@@ -63,6 +68,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             background-color: #232323;
+            color: white;
         }
 
         input[type="submit"] {
@@ -82,7 +88,41 @@
             border-radius: 10px;
             background-color: #232323;
             width: 80%;
+            display: flex; /* Use flexbox */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Distribute items evenly */
         }
+
+            article:hover {
+                background-color: black;
+            }
+
+
+            article p {
+                width: 100px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                color: grey;
+            }
+
+                article p:hover {
+                    width: 200px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    color: grey;
+                }
+
+        .song-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .song-info p {
+                margin: 0;
+            }
+
 
         .article_container {
             width: 100%;
@@ -92,6 +132,32 @@
             align-items: center;
         }
 
+        img {
+            max-width: 100px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .Sidebar_button {
+            width: 80%; /* Occupy 80% of the left container's width */
+            margin-top: 20px; /* Add top margin */
+            padding: 12px; /* Adjust padding */
+            text-align: center; /* Center-align the button text */
+            text-decoration: none; /* Remove default underline */
+            color: white;
+            background-color: #555; /* Change button background color */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
+        }
+
+        .Sidebar_button:hover {
+                background-color: #777; /* Darken button background color on hover */
+            }
 
         .Add_to_playlist_btn {
             background-color: grey;
@@ -116,13 +182,15 @@
             touch-action: manipulation;
             margin-bottom: 10px;
             text-decoration: none;
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
         }
-
     </style>
 </head>
 <body>
     <div class="left-container">
-        <a href="@Url.Action("HomePage")" class="Add_to_playlist_btn">Back</a>
+        <a href="@Url.Action("HomePage")" class="Sidebar_button">Back</a>
     </div>
     <div class="main-container">
 

@@ -13,31 +13,33 @@ namespace DataLogicLayer.DAL
     public class UserRepositiry : IUserRepository
     {
         DatabaseConnection _dbConnection = new DatabaseConnection();
-
-        public (bool, int) Login(string username, string password)
+        public (bool, int, string, string) Login(string username, string password)
         {
-            string queryLogin = "SELECT id, name FROM users WHERE name = @Username AND password = @Password;";
+            string queryLogin = "SELECT id, name, profile_picture FROM users WHERE name = @Username AND password = @Password;";
             try
             {
-                using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+                using (var connection = new MySqlConnection("Server = studmysql01.fhict.local; Uid = dbi538679; Database = dbi538679; Password = Nsp3lEXftR;"))
                 {
                     connection.Open();
                     using (var cmd = new MySqlCommand(queryLogin, connection))
                     {
                         cmd.Parameters.AddWithValue("@Username", username);
                         cmd.Parameters.AddWithValue("@Password", password);
+                        
 
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
                         {
                             if (dataReader.Read())
                             {
                                 int UserId = Convert.ToInt32(dataReader["id"]);
-
-                                return (true, UserId);
+                                string ProfilePicture = dataReader["profile_picture"].ToString();
+                                string Name = dataReader["name"].ToString();
+                                
+                                return (true, UserId, ProfilePicture, Name);
                             }
                             else
                             {
-                                return (false, 0); 
+                                return (false, 0, null, null);
                             }
                         }
                     }
@@ -46,12 +48,12 @@ namespace DataLogicLayer.DAL
             catch (MySqlException ex)
             {
                 Console.WriteLine("Database error: " + ex.Message);
-                return (false, 0);
+                return (false, 0, null, null);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
-                return (false, 0);
+                return (false, 0, null, null);
             }
         }
 
@@ -59,7 +61,7 @@ namespace DataLogicLayer.DAL
         {
             string query = "INSERT INTO `users` (`id`, `name`, `email`, `password`, `profile_picture`) VALUES (NULL, @Name, 'test@123.com', @Password, @ProfilePicture)";
 
-            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            using (var connection = new MySqlConnection("Server = studmysql01.fhict.local; Uid = dbi538679; Database = dbi538679; Password = Nsp3lEXftR;"))
             {
                 connection.Open();
                 using (var cmd = new MySqlCommand(query, connection))

@@ -1,8 +1,19 @@
+using BusinessLogicLayer.Repo_Interfaces;
+using DataLogicLayer.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddScoped<IPlaylistRepository, PlaylistRepository>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepostitory>();
+builder.Services.AddScoped<IUserRepository, UserRepositiry>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

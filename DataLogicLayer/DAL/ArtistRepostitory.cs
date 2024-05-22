@@ -18,43 +18,70 @@ namespace DataLogicLayer.DAL
         public List<ArtistDTO> GetAllArtists()
         {
             var artists = new List<ArtistDTO>();
+            string query = "SELECT `id`, `name` FROM `artists` ORDER BY id DESC";
 
-            if (_dbConnection.OpenConnection())
+
+            try
             {
-                string query = "SELECT `id`, `name` FROM `artists` ORDER BY id DESC";
-
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    using (var reader = command.ExecuteReader())
+
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
                         {
-                            ArtistDTO artist = new ArtistDTO
+                            while (reader.Read())
                             {
-                                Id = Convert.ToInt32(reader["id"]),
-                                Name = reader["name"].ToString(),
-                            };
-                            artists.Add(artist);
+                                ArtistDTO artist = new ArtistDTO
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Name = reader["name"].ToString(),
+                                };
+                                artists.Add(artist);
+                            }
                         }
                     }
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
+
             return artists;
+
         }
 
         public void CreateNewArtist(ArtistDTO artist)
         {
-            if (_dbConnection.OpenConnection())
+            string query = "INSERT INTO `artists`(`id`, `name`) VALUES (NULL,@Name)";
+            try
             {
-                string query = "INSERT INTO `artists`(`id`, `name`) VALUES ('',@Name)";
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    command.Parameters.AddWithValue("@Name", artist.Name);
-                    command.ExecuteNonQuery();
-                }
-                _dbConnection.CloseConnection();
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", artist.Name);
+                        command.ExecuteNonQuery();
+                    }
 
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
             }
         }
 
@@ -67,25 +94,37 @@ namespace DataLogicLayer.DAL
                            "JOIN songs ON artist_songs.song_id = songs.id " +
                            "WHERE artist_songs.artist_id = @id";
 
-            if (_dbConnection.OpenConnection())
+            try
             {
-                MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
-                cmd.Parameters.AddWithValue("@id", id);
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                while (dataReader.Read())
+                if (_dbConnection.OpenConnection())
                 {
-                    SongDTO song = new SongDTO();
-                    song.SongName = dataReader["song_name"].ToString();
-                    song.SongUrl = dataReader["song_url"].ToString();
-                    songs.Add(song);
+                    MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        SongDTO song = new SongDTO();
+                        song.SongName = dataReader["song_name"].ToString();
+                        song.SongUrl = dataReader["song_url"].ToString();
+                        songs.Add(song);
+                    }
+                    dataReader.Close();
                 }
-                dataReader.Close();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
+
             return songs;
+
         }
-
-
     }
 }

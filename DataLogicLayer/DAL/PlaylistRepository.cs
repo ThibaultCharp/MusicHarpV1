@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Repo_Interfaces;
 using System.Xml.Linq;
+using BusinessLogicLayer.ErrorHandling;
 
 
 namespace DataLogicLayer.DAL
@@ -22,57 +23,80 @@ namespace DataLogicLayer.DAL
 		public List<PlaylistDTO> GetSelectedPlaylists(int? user_id)
 		{
 			var playlists = new List<PlaylistDTO>();
+            string query = "SELECT * FROM `playlists` WHERE @User_id = playlists.user_id ORDER BY playlists.id DESC";
 
-			if (_dbConnection.OpenConnection())
+            try
             {
-				string query = "SELECT * FROM `playlists` WHERE @User_id = playlists.user_id ORDER BY playlists.id DESC"; 
+                if (_dbConnection.OpenConnection())
+                {
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@User_id", user_id);
 
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var playlist = new PlaylistDTO
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Name = reader["name"].ToString(),
+                                };
+                                playlists.Add(playlist);
+                            }
+                        }
+                    }
+                }
+            }
 
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
-				{
-                    command.Parameters.AddWithValue("@User_id", user_id);
+            catch (DatabaseErrorExeption ex)
+            {
+                throw;
+            }
 
-                    using (var reader = command.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							var playlist = new PlaylistDTO
-							{
-								Id = Convert.ToInt32(reader["id"]),
-								Name = reader["name"].ToString(),
-							};
-							playlists.Add(playlist);
-						}
-					}
-				}
-				_dbConnection.CloseConnection();
-			}
-			return playlists;
+            finally
+            {
+                _dbConnection.CloseConnection();
+            }
+
+            return playlists;
 		}
 
         public PlaylistDTO GetWantedPlaylist(int id, int? user_id)
         {
             PlaylistDTO playlist = new PlaylistDTO();
-
-            if (_dbConnection.OpenConnection())
+            string query = "SELECT playlists.id, name FROM playlists WHERE @User_id = playlists.user_id";
+            try
             {
-                string query = "SELECT playlists.id, name FROM playlists WHERE @User_id = playlists.user_id";
-
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    command.Parameters.AddWithValue("@User_id", user_id);
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
-                    using (var reader = command.ExecuteReader())
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
                     {
-                        while (reader.Read())
+                        command.Parameters.AddWithValue("@User_id", user_id);
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                        using (var reader = command.ExecuteReader())
                         {
-                            playlist.Id = Convert.ToInt32(reader["id"]);
-                            playlist.Name = reader["name"].ToString();
+                            while (reader.Read())
+                            {
+                                playlist.Id = Convert.ToInt32(reader["id"]);
+                                playlist.Name = reader["name"].ToString();
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
+
                 }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
             }
             return playlist;
         }
@@ -80,39 +104,63 @@ namespace DataLogicLayer.DAL
 
         public void CreateNewPlaylist(PlaylistDTO playlist, int? user_id)
 		{
-            if (_dbConnection.OpenConnection())
-			{
-                string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, @User_id)";
+            try
+            {
+                if (_dbConnection.OpenConnection())
+                {
+                    string query = "INSERT INTO `playlists` (`id`, `name`, `user_id`) VALUES (NULL, @Name, @User_id)";
 
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
-				{
-                    command.Parameters.AddWithValue("@Name", playlist.Name);
-                    command.Parameters.AddWithValue("@User_id", user_id);
-                    command.ExecuteNonQuery();
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", playlist.Name);
+                        command.Parameters.AddWithValue("@User_id", user_id);
+                        command.ExecuteNonQuery();
+                    }
                 }
-				_dbConnection.CloseConnection();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
             }
         }
 
 		public void DeletePlaylist(int id)
 		{
+            try
+            {
 
-            if (_dbConnection.OpenConnection())
-			{
-                string query1 = "DELETE FROM playlist_songs WHERE playlist_id = @id";
-                string query2 = "DELETE FROM playlists WHERE id = @id";
-
-                using (var command = new MySqlCommand(query1, _dbConnection.connection))
-				{
-					command.Parameters.AddWithValue("@id", id);
-					command.ExecuteNonQuery();
-				}
-
-                using (var command = new MySqlCommand(query2, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
+                    string query1 = "DELETE FROM playlist_songs WHERE playlist_id = @id";
+                    string query2 = "DELETE FROM playlists WHERE id = @id";
+
+                    using (var command = new MySqlCommand(query1, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
+
+                    using (var command = new MySqlCommand(query2, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
                 }
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
         }
@@ -122,17 +170,28 @@ namespace DataLogicLayer.DAL
 
 		public void SaveEditedPlaylist(PlaylistDTO playlist)
 		{
-
-            if (_dbConnection.OpenConnection())
+            string query = "UPDATE playlists SET name = @name WHERE id = @id";
+            try
             {
-                string query = "UPDATE playlists SET name = @name WHERE id = @id";
-
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    command.Parameters.AddWithValue("@name", playlist.Name);
-                    command.Parameters.AddWithValue("@id", playlist.Id);
-                    command.ExecuteNonQuery();
+
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        command.Parameters.AddWithValue("@name", playlist.Name);
+                        command.Parameters.AddWithValue("@id", playlist.Id);
+                        command.ExecuteNonQuery();
+                    }
                 }
+            }
+            
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
         }
@@ -148,22 +207,35 @@ namespace DataLogicLayer.DAL
                                "JOIN artists ON artist_songs.artist_id = artists.id " +
                                "JOIN playlist_songs ON songs.id = playlist_songs.song_id " + 
                                "WHERE playlist_songs.playlist_id = @id";
-            if (_dbConnection.OpenConnection())
+
+            try
             {
-
-                MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
-                cmd.Parameters.AddWithValue("@id", id);
-                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                while (dataReader.Read())
+                if (_dbConnection.OpenConnection())
                 {
-                    SongDTO song = new SongDTO();
-                    song.SongName = dataReader["song_name"].ToString();
-                    song.SongUrl = dataReader["song_url"].ToString();
-                    song.ArtistName = dataReader["artist_name"].ToString();
-                    songs.Add (song);
+
+                    MySqlCommand cmd = new MySqlCommand(query, _dbConnection.connection);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        SongDTO song = new SongDTO();
+                        song.SongName = dataReader["song_name"].ToString();
+                        song.SongUrl = dataReader["song_url"].ToString();
+                        song.ArtistName = dataReader["artist_name"].ToString();
+                        songs.Add(song);
+                    }
+                    dataReader.Close();
                 }
-                dataReader.Close();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally 
+            {
                 _dbConnection.CloseConnection();
             }
             return songs;

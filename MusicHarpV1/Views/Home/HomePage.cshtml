@@ -22,7 +22,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .left-container{
+        .left-container {
             width: 20%; /* Adjust as needed */
             float: left;
             margin-right: 5px; /* Add spacing between containers */
@@ -30,8 +30,13 @@
             height: 100%;
             position: fixed;
             border-radius: 10px;
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Arrange items in a column */
+            justify-content: flex-start; /* Align items at the start (top) of the container */
+            align-items: center; /* Center items horizontally */
         }
-        
+
+
 
         .main-container {
             width: 78%; /* Adjust as needed */
@@ -120,11 +125,6 @@
                 margin: 0;
             }
 
-        .Add_to_playlist_btn {
-            margin-left: 10px; /* Add some spacing between the button and text */
-            margin-right: 10px;
-            padding-block-end: 10px;
-        }
 
         .article_container{
             width: 100%;
@@ -134,6 +134,32 @@
             align-items:center;
         }
 
+        img {
+            max-width: 100px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .Sidebar_button {
+            width: 80%; /* Occupy 80% of the left container's width */
+            margin-top: 20px; /* Add top margin */
+            padding: 12px ; /* Adjust padding */
+            text-align: center; /* Center-align the button text */
+            text-decoration: none; /* Remove default underline */
+            color: white;
+            background-color: #555; /* Change button background color */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
+        }
+
+        .Sidebar_button:hover {
+                background-color: #777; /* Darken button background color on hover */
+            }
 
         .Add_to_playlist_btn {
             background-color: grey;
@@ -158,16 +184,21 @@
             touch-action: manipulation;
             margin-bottom: 10px;
             text-decoration: none;
+            margin-left: 10px; /* Add some spacing between the button and text */
+            margin-right: 10px;
+            padding-block-end: 10px;
         }
-
     </style>
 </head>
 <body>
     <div class="left-container">
-        <a href="@Url.Action("Playlist")" class="Add_to_playlist_btn">My playlists</a>
-        <a href="@Url.Action("SongsWithoutArtist")" class="Add_to_playlist_btn">Songs to link</a>
-        <a href="@Url.Action("Artist")" class="Add_to_playlist_btn">Artists</a>
-        <a href="@Url.Action("Index")" class="Add_to_playlist_btn">Logout</a>
+        
+        <p> <img src="@Model.user.ProfilePicture" alt="Logo"> Welcome @Model.user.Name !</p>
+        <a href="@Url.Action("Playlist")" class="Sidebar_button">My playlists</a>
+        <a href="@Url.Action("SongsWithoutArtist")" class="Sidebar_button">Songs to link</a>
+        <a href="@Url.Action("Artist")" class="Sidebar_button">Artists</a>
+        <a href="@Url.Action("Index")" class="Sidebar_button">Logout</a>
+
 
     </div>
     <div class="main-container">

@@ -7,6 +7,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLogicLayer.Repo_Interfaces;
+using BusinessLogicLayer.ErrorHandling;
 
 namespace BusinessLogicLayer.Classes
 {
@@ -24,16 +25,37 @@ namespace BusinessLogicLayer.Classes
 
         public List<Playlist> GetSelectedPlaylists(int? user_id)
         {
-            playlistDTOs = repository.GetSelectedPlaylists(user_id);
-            List<Playlist> playlists = playlistDTOs.Select(dto => new Playlist(dto)).ToList();
+            List<Playlist> playlists = new List<Playlist>();
+            try 
+            {
+                playlistDTOs = repository.GetSelectedPlaylists(user_id);
+                playlists = playlistDTOs.Select(dto => new Playlist(dto)).ToList();
+            }
+
+            catch (DatabaseErrorExeption ex)
+            {
+                throw new DatabaseErrorExeption("An error occurred while fetching playlists from the database.", ex);
+            }
             return playlists;
+
         }
 
-        public PlaylistDTO CreateNewPlaylist(Playlist playlist, int? user_id)
+        public ServiceResponse CreateNewPlaylist(Playlist playlist, int? user_id)
         {
-            PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
-            repository.CreateNewPlaylist(playlistDTO, user_id);
-            return playlistDTO;
+            ServiceResponse response = new ServiceResponse() { Success = false };
+
+            if (playlist.Name.Length >= 30 && playlist.Name.Length!= 0)
+            {
+                response.ErrorMessage = ("Title must be shorter than 30 characters");
+                return response;
+            }
+            else
+            {
+                PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
+                repository.CreateNewPlaylist(playlistDTO, user_id);
+                response.Success = true;
+            }
+            return response;
         }
 
         public void DeletePlaylist(int id)

@@ -9,7 +9,7 @@ namespace BusinessLogicLayer.Repo_Interfaces
 {
     public interface IUserRepository
     {
-        public (bool, int) Login(string username, string password);
+        public (bool, int, string, string) Login(string username, string password);
         public void SignUp(UserDTO user);
     }
 }

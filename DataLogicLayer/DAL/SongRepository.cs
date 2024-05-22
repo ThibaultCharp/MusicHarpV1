@@ -17,31 +17,44 @@ namespace DataLogicLayer.DAL
 
         public List<SongDTO> GetSongsWithoutArtist()
         {
-            var songs = new List<SongDTO>();   
+            var songs = new List<SongDTO>();
+            string query = "SELECT songs.id, songs.name AS song_name, songs.song_url " +
+                            "FROM songs " +
+                            "WHERE songs.id " +
+                            "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.name ASC ";
 
-            if (_dbConnection.OpenConnection())
+            try
             {
-                string query = "SELECT songs.id, songs.name AS song_name, songs.song_url " +
-                    "FROM songs " +
-                    "WHERE songs.id " +
-                    "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.name ASC ";
-
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    using (var reader = command.ExecuteReader())
+
+
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
                         {
-                            SongDTO song = new SongDTO
+                            while (reader.Read())
                             {
-                                Id = Convert.ToInt32(reader["id"]),
-                                SongName = reader["song_name"].ToString(),
-                                SongUrl = reader["song_url"].ToString()
-                            };
-                            songs.Add(song);
+                                SongDTO song = new SongDTO
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    SongName = reader["song_name"].ToString(),
+                                    SongUrl = reader["song_url"].ToString()
+                                };
+                                songs.Add(song);
+                            }
                         }
                     }
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
             return songs;
@@ -51,35 +64,49 @@ namespace DataLogicLayer.DAL
         public List<SongDTO> GetAllSongs()
         {
             var songs = new List<SongDTO>();
+            var query = "SELECT songs.name AS song_name, songs.song_url, artists.name AS artist_name, songs.id " +
+                        "FROM songs JOIN artist_songs ON songs.id = artist_songs.song_id " +
+                        "JOIN artists ON artist_songs.artist_id = artists.id " +
+                        "ORDER BY songs.name ASC";
 
-            if (_dbConnection.OpenConnection())
+            try
             {
-                var query = "SELECT songs.name AS song_name, songs.song_url, artists.name AS artist_name, songs.id " +
-                    "FROM songs JOIN artist_songs ON songs.id = artist_songs.song_id " +
-                    "JOIN artists ON artist_songs.artist_id = artists.id " +
-                    "ORDER BY songs.name ASC";
-
-                using (var command = new MySqlCommand(query, _dbConnection.connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    using (var reader = command.ExecuteReader())
+
+
+                    using (var command = new MySqlCommand(query, _dbConnection.connection))
                     {
-                        while (reader.Read())
+                        using (var reader = command.ExecuteReader())
                         {
-                            SongDTO song = new SongDTO
+                            while (reader.Read())
                             {
-                                Id = Convert.ToInt32(reader["id"]),
-                                SongName = reader["song_name"].ToString(),
-                                ArtistName = reader["artist_name"].ToString(),
-                                SongUrl = reader["song_url"].ToString()
-                            };
-                            songs.Add(song);
+                                SongDTO song = new SongDTO
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    SongName = reader["song_name"].ToString(),
+                                    ArtistName = reader["artist_name"].ToString(),
+                                    SongUrl = reader["song_url"].ToString()
+                                };
+                                songs.Add(song);
+                            }
                         }
                     }
                 }
-                _dbConnection.CloseConnection();
             }
 
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
+            }
             return songs;
+
+
         }
 
 
@@ -87,20 +114,22 @@ namespace DataLogicLayer.DAL
         public List<SongDTO> GetSearchedSongs(string input)
         {
             var songs = new List<SongDTO>();
+            string query = "SELECT songs.name AS song_name, artists.name AS artist_name, songs.song_url, songs.id " +
+               "FROM songs, artists, artist_songs " +
+               "WHERE songs.id = artist_songs.song_id " +
+               "AND artists.id = artist_songs.artist_id " +
+               "AND (songs.name LIKE @Input OR artists.name LIKE @Input)" +
+               "ORDER BY songs.id DESC";
 
-            if (_dbConnection.OpenConnection())
+            try
             {
-                string query = "SELECT songs.name AS song_name, artists.name AS artist_name, songs.song_url, songs.id " +
-                               "FROM songs, artists, artist_songs " +
-                               "WHERE songs.id = artist_songs.song_id " +
-                               "AND artists.id = artist_songs.artist_id " +
-                               "AND (songs.name LIKE @Input OR artists.name LIKE @Input)" +
-                               "ORDER BY songs.id DESC";
-                
-                using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+                if (_dbConnection.OpenConnection())
                 {
-                    connection.Open();
-                    var cmd = new MySqlCommand(query, connection);
+
+
+
+
+                    var cmd = new MySqlCommand(query, _dbConnection.connection);
                     using (cmd)
                     {
                         cmd.Parameters.AddWithValue("@Input", $"%{input}%");
@@ -122,8 +151,17 @@ namespace DataLogicLayer.DAL
                             songs.Add(song);
                         }
                     }
-                    _dbConnection.CloseConnection();
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
             }
             return songs;
         }
@@ -133,47 +171,97 @@ namespace DataLogicLayer.DAL
         {
             string query = "INSERT INTO `playlist_songs` (`id`, `playlist_id`, `song_id`) VALUES (NULL, @pId, @sId)";
 
-            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            try
             {
-                connection.Open();
-                var cmd = new MySqlCommand(query, connection);
+                _dbConnection.OpenConnection();
+                var cmd = new MySqlCommand(query, _dbConnection.connection);
                 using (cmd)
                 {
-                    cmd.Parameters.AddWithValue("@pId", pId);
-                    cmd.Parameters.AddWithValue("@sId", sId);
-                    cmd.ExecuteNonQuery();
+                    string checkQuery = "SELECT COUNT(*) FROM `playlist_songs` WHERE `playlist_id` = @pId AND `song_id` = @sId";
+                    var checkCmd = new MySqlCommand(checkQuery, _dbConnection.connection);
+                    checkCmd.Parameters.AddWithValue("@pId", pId);
+                    checkCmd.Parameters.AddWithValue("@sId", sId);
+
+                    int existingCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (existingCount == 0)
+                    {
+                        cmd.Parameters.AddWithValue("@pId", pId);
+                        cmd.Parameters.AddWithValue("@sId", sId);
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Song with ID {0} already exists in the playlist.", sId);
+                    }
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
             }
         }
 
+
         public void LinkSongToArtist(int ArtistId, int SongId)
         {
-            string query = "INSERT INTO `artist_songs`(`id`, `artist_id`, `song_id`) VALUES ('',@ArtistId,@SongId)";
-            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            string query = "INSERT INTO `artist_songs`(`id`, `artist_id`, `song_id`) VALUES (NULL,@ArtistId,@SongId)";
+
+            try
             {
-                connection.Open();
-                using (var cmd = new MySqlCommand(query, connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    cmd.Parameters.AddWithValue("@ArtistId", ArtistId);
-                    cmd.Parameters.AddWithValue("@SongId", SongId);
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        cmd.Parameters.AddWithValue("@ArtistId", ArtistId);
+                        cmd.Parameters.AddWithValue("@SongId", SongId);
+                        cmd.ExecuteNonQuery();
+
+                    }
                 }
             }
 
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
+                _dbConnection.CloseConnection();
+            }
         }
 
         public void CreateNewSong(SongDTO song)
         {
-            string query = "INSERT INTO `songs`(`id`, `name`, `song_url`) VALUES ('',@Name,@Url)";
-            using (var connection = new MySqlConnection("SERVER=127.0.0.1;DATABASE=musicharp_db;UID=root;PASSWORD="))
+            string query = "INSERT INTO `songs`(`id`, `name`, `song_url`) VALUES (NULL,@Name,@Url)";
+
+            try
             {
-                connection.Open();
-                using (var cmd = new MySqlCommand(query, connection))
+                if (_dbConnection.OpenConnection())
                 {
-                    cmd.Parameters.AddWithValue("@Name", song.SongName);
-                    cmd.Parameters.AddWithValue("@Url", song.SongUrl);
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = new MySqlCommand(query, _dbConnection.connection))
+                    {
+                        cmd.Parameters.AddWithValue("@Name", song.SongName);
+                        cmd.Parameters.AddWithValue("@Url", song.SongUrl);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occured: " + ex);
+            }
+
+            finally
+            {
                 _dbConnection.CloseConnection();
             }
         }

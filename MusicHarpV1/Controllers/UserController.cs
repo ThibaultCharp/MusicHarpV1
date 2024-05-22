@@ -26,14 +26,21 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Login(string username, string password)
         {
-            var (loginSuccessful, userId) = UserService.Login(username, password);
+            var (loginSuccessful, userId, ProfilePicture, Name) = UserService.Login(username, password);
 
             if (loginSuccessful)
             {
                 HttpContext.Session.SetInt32("User_Id", userId);
-                HttpContext.Session.SetString("Username", username);
+                HttpContext.Session.SetString("Username", Name);
+                HttpContext.Session.SetString("ProfilePicture", ProfilePicture);
 
                 return RedirectToAction("HomePage", "Home");
+            }
+
+            else if(userId == 0)
+            {
+                return RedirectToAction("Index", "Home");
+
             }
 
             else
