@@ -9,7 +9,10 @@ namespace BusinessLogicLayer.EntityDTO_s
 {
     public class PlaylistDTO
     {
-        public PlaylistDTO() { }
+        public PlaylistDTO() 
+        {
+            User = new UserDTO();
+        }
 
         public PlaylistDTO(Playlist playlist) 
         { 
@@ -19,6 +22,8 @@ namespace BusinessLogicLayer.EntityDTO_s
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public UserDTO User { get; set; }
 
     }
 }

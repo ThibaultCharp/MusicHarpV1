@@ -22,7 +22,6 @@ namespace DataLogicLayer.DAL
                             "FROM songs " +
                             "WHERE songs.id " +
                             "NOT IN (SELECT song_id FROM artist_songs) ORDER BY songs.name ASC ";
-
             try
             {
                 if (_dbConnection.OpenConnection())
@@ -58,7 +57,6 @@ namespace DataLogicLayer.DAL
                 _dbConnection.CloseConnection();
             }
             return songs;
-
         }
 
         public List<SongDTO> GetAllSongs()
@@ -74,20 +72,19 @@ namespace DataLogicLayer.DAL
                 if (_dbConnection.OpenConnection())
                 {
 
-
                     using (var command = new MySqlCommand(query, _dbConnection.connection))
                     {
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                SongDTO song = new SongDTO
-                                {
-                                    Id = Convert.ToInt32(reader["id"]),
-                                    SongName = reader["song_name"].ToString(),
-                                    ArtistName = reader["artist_name"].ToString(),
-                                    SongUrl = reader["song_url"].ToString()
-                                };
+                                SongDTO song = new SongDTO();
+
+                                song.Id = Convert.ToInt32(reader["id"]);
+                                song.SongName = reader["song_name"].ToString();
+                                song.Artist.Name = reader["artist_name"].ToString();
+                                song.SongUrl = reader["song_url"].ToString();
+                               
                                 songs.Add(song);
                             }
                         }
@@ -125,10 +122,6 @@ namespace DataLogicLayer.DAL
             {
                 if (_dbConnection.OpenConnection())
                 {
-
-
-
-
                     var cmd = new MySqlCommand(query, _dbConnection.connection);
                     using (cmd)
                     {
@@ -140,14 +133,13 @@ namespace DataLogicLayer.DAL
                     {
                         while (reader.Read())
                         {
-                            SongDTO song = new SongDTO
-                            {
-                                SongName = reader["song_name"].ToString(),
-                                ArtistName = reader["artist_name"].ToString(),
-                                SongUrl = reader["song_url"].ToString(),
-                                Id = Convert.ToInt32(reader["id"])
+                            SongDTO song = new SongDTO();
 
-                            };
+                            song.Id = Convert.ToInt32(reader["id"]);
+                            song.SongName = reader["song_name"].ToString();
+                            song.Artist.Name = reader["artist_name"].ToString();
+                            song.SongUrl = reader["song_url"].ToString();
+
                             songs.Add(song);
                         }
                     }

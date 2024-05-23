@@ -9,9 +9,12 @@ namespace BusinessLogicLayer.Entitys
 {
     public class Playlist
     {
-        public Playlist() { }
+        public Playlist() 
+        {
+            User = new User();
+        }
 
-        public Playlist(PlaylistDTO playlistDTO) 
+        public Playlist(PlaylistDTO playlistDTO) : this()
         {
             Id = playlistDTO.Id;
             Name = playlistDTO.Name;
@@ -19,5 +22,7 @@ namespace BusinessLogicLayer.Entitys
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public User User { get; set; }
     }
 }

@@ -77,7 +77,6 @@ namespace MusicHarpV1.Controllers
                     ViewBag.ErrorMessage = TempData["ErrorMessage"];
                 }
 
-
                 return View(playlistViewModel);
             }
 

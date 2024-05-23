@@ -220,7 +220,7 @@
                             <article>
                                 <div class="song-info">
                                     <p>@song.SongName</p>
-                                    <p>@song.ArtistName</p>
+                                    <p>@song.Artist.Name</p>
 
                                     <a href="@Url.Action("SelectPlayListToAddSong", new { sId = song.Id })" class="Add_to_playlist_btn" style="width: 100px; display: inline-block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Add to a playlist</a>
                                 </div>

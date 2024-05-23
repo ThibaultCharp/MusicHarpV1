@@ -10,19 +10,22 @@ namespace BusinessLogicLayer.Entitys
 {
     public class Song
     {
-        public Song() { }
+        public Song() 
+        {
+            Artist = new Artist();
+        }
 
-        public Song(SongDTO songDTO) 
+        public Song(SongDTO songDTO) : this()
         {
             Id = songDTO.Id;
-            ArtistName = songDTO.ArtistName;
+            Artist.Name = songDTO.Artist.Name;
             SongName = songDTO.SongName;
             SongUrl = songDTO.SongUrl;
         }
 
 
         public int Id { get; set; }
-        public string ArtistName { get; set; }
+        public Artist Artist { get; set; }
         public string SongName { get; set; }
         public string SongUrl { get; set; }
     }

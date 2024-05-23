@@ -9,18 +9,21 @@ namespace BusinessLogicLayer.EntityDTO_s
 {
     public class SongDTO
     {
-        public SongDTO() { }
+        public SongDTO() 
+        {
+            Artist = new ArtistDTO();
+        }
 
-        public SongDTO(Song song) 
+        public SongDTO(Song song) : this()
         {
             Id = song.Id;
-            ArtistName = song.ArtistName;
+            Artist.Name = song.Artist.Name;
             SongName = song.SongName;
             SongUrl = song.SongUrl;
         }
 
         public int Id { get; set; }
-        public string ArtistName { get; set; }
+        public ArtistDTO Artist { get; set; }
         public string SongName { get; set; }
         public string SongUrl { get; set; }
     }

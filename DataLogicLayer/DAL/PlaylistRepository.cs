@@ -222,7 +222,7 @@ namespace DataLogicLayer.DAL
                         SongDTO song = new SongDTO();
                         song.SongName = dataReader["song_name"].ToString();
                         song.SongUrl = dataReader["song_url"].ToString();
-                        song.ArtistName = dataReader["artist_name"].ToString();
+                        song.Artist.Name = dataReader["artist_name"].ToString();
                         songs.Add(song);
                     }
                     dataReader.Close();
