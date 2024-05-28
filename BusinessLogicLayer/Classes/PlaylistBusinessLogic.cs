@@ -44,17 +44,25 @@ namespace BusinessLogicLayer.Classes
         {
             ServiceResponse response = new ServiceResponse() { Success = false };
 
-            if (playlist.Name.Length >= 30 && playlist.Name.Length!= 0)
+            if (playlist.Name == null)
             {
-                response.ErrorMessage = ("Title must be shorter than 30 characters");
+                throw new Exception("Title cannot be empty.");
+                response.ErrorMessage = "Title cannot be empty.";
                 return response;
             }
-            else
+
+            if (playlist.Name.Length >= 30)
             {
-                PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
-                repository.CreateNewPlaylist(playlistDTO, user_id);
-                response.Success = true;
+                throw new Exception("Title must be shorter than 30 characters.");
+
+                response.ErrorMessage = "Title must be shorter than 30 characters.";
+                return response;
             }
+
+            PlaylistDTO playlistDTO = new PlaylistDTO(playlist);
+            repository.CreateNewPlaylist(playlistDTO, user_id);
+            response.Success = true;
+
             return response;
         }
 

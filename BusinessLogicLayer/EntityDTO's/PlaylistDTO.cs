@@ -21,7 +21,7 @@ namespace BusinessLogicLayer.EntityDTO_s
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public UserDTO User { get; set; }
 

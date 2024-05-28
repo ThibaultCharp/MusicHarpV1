@@ -82,10 +82,8 @@ namespace MusicHarpV1.Controllers
 
             catch (DatabaseErrorExeption ex) 
             {
-                return View(new DatabaseErrorExeption("sdasc", ex));
+                return View(new DatabaseErrorExeption("Database werkt niet", ex));
             }
-           
-
         }
 
         public IActionResult Artist() 

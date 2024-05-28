@@ -12,9 +12,11 @@ namespace MusicHarpUnitTest
     public class FakePlaylistDAL : IPlaylistRepository
     {
         List<PlaylistDTO> playlists = new List<PlaylistDTO>();
+        List<SongDTO> songs = new List<SongDTO>();
 
-        UserDTO user1 = new UserDTO { Id = 1, Name = "Test", Password = "password", ProfilePicture = "swedrfgyhuj" };
-        UserDTO user2 = new UserDTO { Id = 2, Name = "Test", Password = "password", ProfilePicture = "swedrfgyhuj" };
+        UserDTO user1 = new UserDTO { Id = 1, Name = "Test1", Password = "password", ProfilePicture = "swedrfgyhuj" };
+        UserDTO user2 = new UserDTO { Id = 2, Name = "Test2", Password = "password", ProfilePicture = "swedrfgyhuj" };
+
 
         public FakePlaylistDAL()
         {
@@ -23,6 +25,7 @@ namespace MusicHarpUnitTest
             playlists.Add(new PlaylistDTO { Id = 3, Name = "P3", User = user2 });
             playlists.Add(new PlaylistDTO { Id = 4, Name = "P4", User = user1 });
             playlists.Add(new PlaylistDTO { Id = 5, Name = "P5", User = user1 });
+
         }
 
         public List<PlaylistDTO> GetSelectedPlaylists(int? user_id)
@@ -40,9 +43,7 @@ namespace MusicHarpUnitTest
 
         public void CreateNewPlaylist(PlaylistDTO playlist, int? user_id)
         {
-            playlist.Id = playlists.Max(p => p.Id) + 1;
-            playlist.User.Id = user_id ?? playlist.User.Id;
-            playlists.Add(playlist);
+
         }
 
         public void DeletePlaylist(int id)
@@ -54,12 +55,7 @@ namespace MusicHarpUnitTest
 
         public void SaveEditedPlaylist(PlaylistDTO playlist)
         {
-            var existingPlaylist = playlists.FirstOrDefault(p => p.Id == playlist.Id);
-            if (existingPlaylist != null)
-            {
-                existingPlaylist.Name = playlist.Name;
-                existingPlaylist.User = playlist.User;
-            }
+
         }
 
         public List<SongDTO> GetSongsInPlaylist(int id)
